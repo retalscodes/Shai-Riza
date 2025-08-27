@@ -188,6 +188,16 @@
             color: var(--accent-brown);
             text-align: right;
             font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 5px;
+        }
+        
+        .currency-logo {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: var(--accent-brown);
         }
         
         .price-placeholder {
@@ -299,122 +309,234 @@
             background: linear-gradient(to right, transparent, var(--accent-brown), transparent);
             margin: 0 1rem;
         }
+        
+        .price-comment {
+            font-style: italic;
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 10px;
+            padding: 5px;
+            background-color: #fff9e6;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1 class="cafe-name">Shai Riza</h1>
-        <p class="tagline">Where Tradition Meets Taste</p>
+        <h1 class="cafe-name">شاي ريزا</h1>
+        <p class="tagline">حيث التقليد يلتقي بالذوق</p>
         <div class="header-pattern"></div>
     </header>
 
     <nav>
         <div class="nav-container">
-            <a href="#signature-teas" class="active">Signature Teas</a>
-            <a href="#coffees">Coffees</a>
-            <a href="#pastries">Pastries</a>
-            <a href="#about">About Us</a>
-            <a href="#contact">Contact</a>
+            <a href="#signature-teas" class="active">شاي بتوقيعنا الخاص</a>
+            <a href="#coffees">القهوة</a>
+            <a href="#cold-beverages">المشروبات الباردة</a>
+            <a href="#pastries">حلويات ومعجنات شهية</a>
+            <a href="#contact">تواصل معنا</a>
         </div>
     </nav>
 
     <div class="container">
         <section id="signature-teas" class="menu-section">
-            <h2 class="section-title">Signature Teas</h2>
+            <h2 class="section-title">Signature teas</h2>
             <div class="menu-items">
                 <!-- Item 1 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Ghada Tea</span>
+                        <span class="item-name-en">شاي الغضا</span>
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">شاي الغضا</span>
+                        <span class="item-name-ar">Ghada Tea</span>
                     </div>
-                    <p class="item-desc">A traditional tea with a unique desert flavor, brewed to perfection.</p>
-                    <p class="item-price"><span class="price-placeholder"></span></p>
+                    <p class="item-desc">شاي تقليدي بنكهة صحراوية فريدة، يُحضَّر بعناية حتى الكمال</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
                 </div>
 
                 <!-- Item 2 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Zaman Tea</span>
+                        <span class="item-name-en">شاي زمان</span>
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">شاي زمان</span>
+                        <span class="item-name-ar">Zaman Tea</span>
                     </div>
-                    <p class="item-desc">A nostalgic blend that takes you back in time with its classic taste.</p>
-                    <p class="item-price"><span class="price-placeholder"></span></p>
+                    <p class="item-desc">مزيج يحمل نكهة الماضي ويعيدك بعبقه إلى زمنٍ كلاسيكي</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
                 </div>
 
                 <!-- Item 3 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Hadhramaut Tea</span>
+                        <span class="item-name-ar">شاي مدخن</span>
+
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">شاي حضرموت</span>
+                        <span class="item-name-en">Smoked Tea</span>
                     </div>
-                    <p class="item-desc">An exotic tea with distinctive flavors from the Hadhramaut region.</p>
-                    <p class="item-price"><span class="price-placeholder"></span></p>
+                    <p class="item-desc">شاي غني وجريء يتميز بنكهته ورائحته الدخانية الفريدة</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
                 </div>
 
                 <!-- Item 4 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Smoked Tea</span>
+                        <span class="item-name-ar">شاي حضرموت</span>
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">شاي مدخن</span>
+                        <span class="item-name-en">Hadhramaut Tea</span>
                     </div>
-                    <p class="item-desc">A rich, bold tea with a distinctive smoky aroma and flavor.</p>
-                    <p class="item-price"><span class="price-placeholder"></span></p>
+                    <p class="item-desc">شاي فاخر بنكهات مميزة من قلب حضرموت</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
                 </div>
 
                 <!-- Item 5 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Karak Chai (Saffron Masala)</span>
+                        <span class="item-name-ar">شاي الوزه</span>
+
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">شاي كرك (زعفران ماسالا)</span>
+                        <span class="item-name-en">Ouzah Tea</span>
                     </div>
-                    <p class="item-desc">A luxurious blend of karak chai infused with saffron and masala spices.</p>
-                    <p class="item-price"><span class="price-placeholder"></span></p>
+                    <p class="item-desc">مزيج خاص بطعم رقيق ومنعش</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">شاي عراقي خيام</span>
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Iraqi Khiyam Tea</span>
+
+                    </div>
+                    <p class="item-desc">شاي عراقي تقليدي بنكهة قوية وفريدة</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">شاي تولفيه</span>
+
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Tolfa Tea</span>
+                    </div>
+                    <p class="item-desc">مزيج فريد من التوابل والأعشاب العطرية</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
+                </div>
+
+                <!-- Item 8 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">شاي أربع 7777</span>
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Arba 7777 Tea</span>
+
+                    </div>
+                    <p class="item-desc">مزيج فاخر بطعم غني ومعقد المكونات</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
+                </div>
+
+                <!-- Item 9 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">شاي عراقي مسيب</span>
+
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Iraqi Maseeb Tea</span>
+                    </div>
+                    <p class="item-desc">شاي عراقي تقليدي مشهور بشخصيته القوية</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
+                </div>
+
+                <!-- Item 10 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">شاي مذاق الحجاز معطر</span>
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Hejaz Scented Tea</span>
+                    </div>
+                    <p class="item-desc">مزيج شاي عطري مستوحى من نكهات منطقة الحجاز</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
+                </div>
+
+                <!-- Item 11 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">شاي كرك (زعفران ماسالا)</span>
+
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Karak Chai (Saffron Masala)</span>
+                    </div>
+                    <p class="item-desc">مزيج فاخر من شاي الكرك مع خيوط الزعفران وتوابل الماسالا</p>
+                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
                 </div>
             </div>
+            <p class="price-comment">All teas are priced at 7 dirhams</p>
         </section>
 
         <div class="decorative-divider">
-            <i class="fas fa-leaf"></i>
+            <i class="fas fa-mug-hot"></i>
         </div>
 
         <section id="coffees" class="menu-section">
-            <h2 class="section-title">Coffees</h2>
+            <h2 class="section-title">القهوة</h2>
             <div class="menu-items">
-                <!-- Coffee items would go here -->
+                <!-- Coffee Item 1 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Arabic Coffee</span>
+                        <span class="item-name-ar">قهوة تركش (بن العميد)</span>
+
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">قهوة عربية</span>
+                        <span class="item-name-en">Turkish Coffee (Al Ameed Beans)</span>
                     </div>
-                    <p class="item-desc">Traditional Arabic coffee with cardamom, lightly roasted and brewed.</p>
+                    <p class="item-desc">قهوة تركية أصيلة مصنوعة من حبوب الأميد الفاخرة</p>
                     <p class="item-price"><span class="price-placeholder"></span></p>
                 </div>
 
+                <!-- Add more coffee items here following the same structure -->
+            </div>
+            <p class="price-comment">
+                <!-- Add price comment for coffees here if needed -->
+            </p>
+        </section>
+
+        <div class="decorative-divider">
+            <i class="fas fa-glass-whiskey"></i>
+        </div>
+
+        <section id="cold-beverages" class="menu-section">
+            <h2 class="section-title">المشروبات الباردة</h2>
+            <div class="menu-items">
+                <!-- Cold Beverage Item 1 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Cappuccino</span>
+                        <span class="item-name-ar">كركديه</span>
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">كابتشينو</span>
+                        <span class="item-name-en">Hibiscus</span>
                     </div>
-                    <p class="item-desc">Perfect balance of espresso, steamed milk, and rich foam.</p>
+                    <p class="item-desc">مشروب الكركديه المنعش، يُقدّم بارداً</p>
                     <p class="item-price"><span class="price-placeholder"></span></p>
                 </div>
+
+                <!-- Add more cold beverage items here following the same structure -->
             </div>
+            <p class="price-comment">
+                <!-- Add price comment for cold beverages here if needed -->
+            </p>
         </section>
 
         <div class="decorative-divider">
@@ -422,57 +544,101 @@
         </div>
 
         <section id="pastries" class="menu-section">
-            <h2 class="section-title">Pastries & Desserts</h2>
+            <h2 class="section-title">حلويات ومعجنات شهية</h2>
             <div class="menu-items">
-                <!-- Pastry items would go here -->
+                <!-- Pastry Item 1 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Baklava</span>
+                        <span class="item-name-ar">سمبوسه بالجبن وشيبس عمان</span>
+
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">بقلاوة</span>
+                        <span class="item-name-en">Cheese Sambousa with Omani Chips</span>
                     </div>
-                    <p class="item-desc">Layers of flaky pastry with nuts and sweet syrup.</p>
+                    <p class="item-desc">معجنات مقرمشة محشوة بالجبن، تُقدّم مع رقائق عمانية</p>
                     <p class="item-price"><span class="price-placeholder"></span></p>
                 </div>
 
+                <!-- Pastry Item 2 -->
                 <div class="menu-item">
                     <div class="item-name">
-                        <span class="item-name-en">Kunafa</span>
+                        <span class="item-name-ar">خلية النحل بالجبن</span>
+
                     </div>
                     <div class="item-name">
-                        <span class="item-name-ar">كنافة</span>
+                        <span class="item-name-en">Beehive with Cheese</span>
                     </div>
-                    <p class="item-desc">Cheese pastry soaked in sweet syrup, topped with pistachios.</p>
+                    <p class="item-desc">معجنات قرص العسل المقرمشة المحشوة بالجبن</p>
+                    <p class="item-price"><span class="price-placeholder"></span></p>
+                </div>
+
+                <!-- Pastry Item 3 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">خلية الكرك</span>
+
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Karak Beehive</span>
+                    </div>
+                    <p class="item-desc">معجنات قرص العسل بنكهة شاي الكرك الفاخرة</p>
+                    <p class="item-price"><span class="price-placeholder"></span></p>
+                </div>
+
+                <!-- Pastry Item 4 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">خلية النحل بالكرواسون</span>
+
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Croissant Beehive</span>
+                    </div>
+                    <p class="item-desc">معجنات قرص العسل الرقيقة المصنوعة من عجينة الكرواسون</p>
+                    <p class="item-price"><span class="price-placeholder"></span></p>
+                </div>
+
+                <!-- Pastry Item 5 -->
+                <div class="menu-item">
+                    <div class="item-name">
+                        <span class="item-name-ar">كريم كراميل</span>
+                    </div>
+                    <div class="item-name">
+                        <span class="item-name-en">Crème Caramel</span>
+
+                    </div>
+                    <p class="item-desc">كريم كراميل يذوب في الفم بطعمه الغني والناعم</p>
                     <p class="item-price"><span class="price-placeholder"></span></p>
                 </div>
             </div>
+            <p class="price-comment">
+                <!-- Add price comment for pastries here if needed -->
+            </p>
         </section>
     </div>
 
-    <footer>
+    <footer id="تواصل معنا">
         <div class="contact-info">
             <div class="contact-item">
                 <i class="fas fa-map-marker-alt"></i>
-                <span>123 Tea Street, Riyadh</span>
+                <span>Madinat Zayed - مدينة زايد</span>
             </div>
             <div class="contact-item">
                 <i class="fas fa-phone"></i>
-                <span>+966 12 345 6789</span>
+                <span>+971</span>
             </div>
             <div class="contact-item">
                 <i class="fas fa-clock"></i>
-                <span>Open daily: 7AM - 11PM</span>
+                <span>Open daily: 6AM - 12AM</span>
             </div>
         </div>
 
         <div class="social-icons">
             <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
         </div>
 
-        <p>© 2023 Shai Riza Cafe. All rights reserved.</p>
+        <p>© 2025 Shai Riza Cafe. All rights reserved.</p>
     </footer>
 
     <script>
