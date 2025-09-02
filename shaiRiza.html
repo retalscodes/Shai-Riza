@@ -359,13 +359,28 @@
         
         .logo-container {
             margin-bottom: 1rem;
+            text-align: center;
         }
         
-        .logo-placeholder {
-            background-color: rgba(255, 255, 255, 0.3);
-            padding: 1rem;
-            border-radius: 10px;
-            display: inline-block;
+        .cafe-logo {
+            height: 140px;
+            width: 140px;
+            border-radius: 50%;
+            /* This makes it circular! */
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 4px solid var(--accent-brown);
+            background-color: var(--white);
+            padding: 5px;
+            object-fit: cover;
+            /* Ensures image fills circle properly */
+            transition: all 0.3s ease;
+        }
+        
+        .cafe-logo:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
         /* Smooth scrolling for the whole page */
         
@@ -377,420 +392,438 @@
 
 <body>
 
-    <header>
-        <div class="logo-container">
-            <div class="logo-placeholder">
-                <!-- Add your logo here -->
-                <p>الشعار الخاص بك هنا</p>
-                <i class="fas fa-image" style="font-size: 2rem;"></i>
-            </div>
-        </div>
-        <h1 class="cafe-name">شاي ريزا</h1>
-        <p class="tagline">نكهة من زمان في كل استكان</p>
-        <div class="header-pattern"></div>
-    </header>
-
-    <nav>
-        <div class="nav-container">
-            <a href="#signature-teas" class="active">أنواع الشاي الفاخر</a>
-            <a href="#coffees">القهوة</a>
-            <a href="#cold-beverages">المشروبات الباردة</a>
-            <a href="#pastries">حلويات ومعجنات ريزا</a>
-            <a href="#تواصل-معنا">تواصل معنا</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        <section id="signature-teas" class="menu-section">
-            <h2 class="section-title">أنواع الشاي الفاخر</h2>
-            <div class="menu-items">
-                <!-- Item 1 -->
-                <div class="menu-item">
-                    <div class="item-number">01</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي الغضا</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Ghada Tea</span>
-                    </div>
-                    <p class="item-desc">شاي تقليدي بنكهة صحراوية فريدة، يُحضَّر بعناية حتى الكمال</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="menu-item">
-                    <div class="item-number">02</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي زمان</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Zaman Tea</span>
-                    </div>
-                    <p class="item-desc">مزيج يحمل نكهة الماضي ويعيدك بعبقه إلى زمنٍ كلاسيكي</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="menu-item">
-                    <div class="item-number">03</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي مدخن</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Smoked Tea</span>
-                    </div>
-                    <p class="item-desc">شاي غني وجريء يتميز بنكهته ورائحته الدخانية الفريدة</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="menu-item">
-                    <div class="item-number">04</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي حضرموت</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Hadhramaut Tea</span>
-                    </div>
-                    <p class="item-desc">شاي فاخر بنكهات مميزة من قلب حضرموت</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="menu-item">
-                    <div class="item-number">05</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي الوزه</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Ouzah Tea</span>
-                    </div>
-                    <p class="item-desc">مزيج خاص بطعم رقيق ومنعش</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 6 -->
-                <div class="menu-item">
-                    <div class="item-number">06</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي عراقي خيام</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Iraqi Khiyam Tea</span>
-                    </div>
-                    <p class="item-desc">شاي عراقي تقليدي بنكهة قوية وفريدة</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 7 -->
-                <div class="menu-item">
-                    <div class="item-number">07</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي تولفيه</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Tolfa Tea</span>
-                    </div>
-                    <p class="item-desc">مزيج فريد من التوابل والأعشاب العطرية</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 8 -->
-                <div class="menu-item">
-                    <div class="item-number">08</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي أربع 7777</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Arba 7777 Tea</span>
-                    </div>
-                    <p class="item-desc">مزيج فاخر بطعم غني ومعقد المكونات</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 9 -->
-                <div class="menu-item">
-                    <div class="item-number">09</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي عراقي مسيب</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Iraqi Maseeb Tea</span>
-                    </div>
-                    <p class="item-desc">شاي عراقي تقليدي مشهور بشخصيته القوية</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 10 -->
-                <div class="menu-item">
-                    <div class="item-number">10</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي مذاق الحجاز معطر</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Hejaz Scented Tea</span>
-                    </div>
-                    <p class="item-desc">مزيج شاي عطري مستوحى من نكهات منطقة الحجاز</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Item 11 -->
-                <div class="menu-item">
-                    <div class="item-number">11</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي كرك (زعفران ماسالا)</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Karak Chai (Saffron Masala)</span>
-                    </div>
-                    <p class="item-desc">مزيج فاخر من شاي الكرك مع خيوط الزعفران وتوابل الماسالا</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-            </div>
-            <p class="price-comment">يمكنك إضافة حبق ونعناع، على حسب الطلب</p>
-        </section>
-
-        <div class="decorative-divider">
-            <i class="fas fa-mug-hot"></i>
+    <body>
+        <!-- DEBUG: Add this temporarily to check the image -->
+        <div style="background: lightyellow; padding: 10px; text-align: center; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
         </div>
 
-        <section id="coffees" class="menu-section">
-            <h2 class="section-title">القهوة</h2>
-            <div class="menu-items">
-                <!-- Coffee Item 1 -->
-                <div class="menu-item">
-                    <div class="item-number">01</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">قهوة تركش (بن العميد)</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Turkish Coffee (Al Ameed Beans)</span>
-                    </div>
-                    <p class="item-desc">قهوة تركية أصيلة مصنوعة من حبوب بن العميد الفاخرة</p>
-                    <p class="item-price"><span class="currency-logo">D</span>12.00</p>
-                </div>
+        <header>
+            <!-- your header code -->
+        </header>
 
-                <!-- Add more coffee items here following the same structure -->
+        <header>
+            <div class="logo-container">
+                <img src="shairizaa_page-0001.jpg" alt="Riza Tea Cafe Logo" class="cafe-logo">
             </div>
-        </section>
+            <h1 class="cafe-name">شاي ريزا</h1>
+            <p class="tagline">نكهة من زمان في كل استكان</p>
+            <div class="header-pattern"></div>
+        </header>
 
-        <div class="decorative-divider">
-            <i class="fas fa-glass-whiskey"></i>
+        <nav>
+            <div class="nav-container">
+                <a href="#signature-teas" class="active">أنواع الشاي الفاخر</a>
+                <a href="#coffees">القهوة</a>
+                <a href="#cold-beverages">المشروبات الباردة</a>
+                <a href="#pastries">حلويات ومعجنات ريزا</a>
+                <a href="#تواصل-معنا">تواصل معنا</a>
+            </div>
+        </nav>
+
+        <div class="container">
+            <section id="signature-teas" class="menu-section">
+                <h2 class="section-title">أنواع الشاي الفاخر</h2>
+                <div class="menu-items">
+                    <!-- Item 1 -->
+                    <div class="menu-item">
+                        <div class="item-number">01</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي الغضا</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Ghada Tea</span>
+                        </div>
+                        <p class="item-desc">شاي تقليدي بنكهة صحراوية فريدة، يُحضَّر بعناية حتى الكمال</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="menu-item">
+                        <div class="item-number">02</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي زمان</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Zaman Tea</span>
+                        </div>
+                        <p class="item-desc">مزيج يحمل نكهة الماضي ويعيدك بعبقه إلى زمنٍ قديم</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="menu-item">
+                        <div class="item-number">03</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي مدخن</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Smoked Tea</span>
+                        </div>
+                        <p class="item-desc">شاي غني وجريء يتميز بنكهته ورائحته الدخانية الفريدة</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="menu-item">
+                        <div class="item-number">04</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي حضرموت</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Hadhramaut Tea</span>
+                        </div>
+                        <p class="item-desc">شاي فاخر بنكهات مميزة من قلب حضرموت</p>
+                        <p class="item-price"><span class="currency-logo">D</span>7.00</p>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="menu-item">
+                        <div class="item-number">05</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي الوزه</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Ouzah Tea</span>
+                        </div>
+                        <p class="item-desc">مزيج خاص بطعم رقيق ومنعش</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 6 -->
+                    <div class="menu-item">
+                        <div class="item-number">06</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي عراقي خيام</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Iraqi Khiyam Tea</span>
+                        </div>
+                        <p class="item-desc">شاي عراقي تقليدي بنكهة قوية وفريدة</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 7 -->
+                    <div class="menu-item">
+                        <div class="item-number">07</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي تولفيه</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Tolfa Tea</span>
+                        </div>
+                        <p class="item-desc">مزيج فريد من التوابل والأعشاب العطرية</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 8 -->
+                    <div class="menu-item">
+                        <div class="item-number">08</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي أربع 7777</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Arba 7777 Tea</span>
+                        </div>
+                        <p class="item-desc">مزيج فاخر بطعم غني ومعقد المكونات</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 9 -->
+                    <div class="menu-item">
+                        <div class="item-number">09</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي عراقي مسيب</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Iraqi Maseeb Tea</span>
+                        </div>
+                        <p class="item-desc">شاي عراقي تقليدي مشهور بشخصيته القوية</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 10 -->
+                    <div class="menu-item">
+                        <div class="item-number">10</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي مذاق الحجاز معطر</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Hejaz Scented Tea</span>
+                        </div>
+                        <p class="item-desc">مزيج شاي عطري مستوحى من نكهات منطقة الحجاز</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Item 11 -->
+                    <div class="menu-item">
+                        <div class="item-number">11</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي كرك (زعفران ماسالا)</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Karak Chai (Saffron Masala)</span>
+                        </div>
+                        <p class="item-desc">مزيج فاخر من شاي الكرك مع خيوط الزعفران وتوابل الماسالا</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+                </div>
+                <p class="price-comment">يمكنك إضافة حبق ونعناع، على حسب الطلب</p>
+            </section>
+
+            <div class="decorative-divider">
+                <i class="fas fa-mug-hot"></i>
+            </div>
+
+            <section id="coffees" class="menu-section">
+                <h2 class="section-title">القهوة</h2>
+                <div class="menu-items">
+                    <!-- Coffee Item 1 -->
+                    <div class="menu-item">
+                        <div class="item-number">01</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">قهوة تركش (بن العميد)</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Turkish Coffee (Al Ameed Beans)</span>
+                        </div>
+                        <p class="item-desc">قهوة تركية أصيلة مصنوعة من حبوب بن العميد الفاخرة</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>12.00</p>
+                    </div>
+
+                    <!-- Add more coffee items here following the same structure -->
+                </div>
+            </section>
+
+            <div class="decorative-divider">
+                <i class="fas fa-glass-whiskey"></i>
+            </div>
+
+            <section id="cold-beverages" class="menu-section">
+                <h2 class="section-title">المشروبات الباردة</h2>
+                <div class="menu-items">
+                    <!-- Cold Beverage Item 1 -->
+                    <div class="menu-item">
+                        <div class="item-number">01</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">كركديه</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Hibiscus</span>
+                        </div>
+                        <p class="item-desc">مشروب الكركديه المنعش، يُقدّم بارداً</p>
+                        <p class="item-price"><span class="currency-logo"></span></p>
+                    </div>
+
+                    <!-- Cold Beverage Item 2 -->
+                    <div class="menu-item">
+                        <div class="item-number">02</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">شاي مثلج</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Iced Tea</span>
+                        </div>
+                        <p class="item-desc">ليمون\خوخ - مشروب الشاي المثلج المنعش، يُقدّم بارداً</p>
+                        <p class="item-price"><span class="currency-logo"></span></p>
+                    </div>
+
+                    <!-- Cold Beverage Item 3 -->
+                    <div class="menu-item">
+                        <div class="item-number">03</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">اساي سموذي</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Acai Smoothie</span>
+                        </div>
+                        <p class="item-desc">سموذي الاساي المثلج المنعش، يُقدّم بارداً</p>
+                        <p class="item-price"><span class="currency-logo"></span></p>
+                    </div>
+
+                    <!-- Cold Beverage Item 4 -->
+                    <div class="menu-item">
+                        <div class="item-number">04</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">ماء</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Water Bottle</span>
+                        </div>
+                        <p class="item-desc"></p>
+                        <p class="item-price"><span class="currency-logo">AED</span>2.00</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="decorative-divider">
+                <i class="fas fa-cookie-bite"></i>
+            </div>
+
+            <section id="pastries" class="menu-section">
+                <h2 class="section-title">حلويات ومعجنات ريزا</h2>
+                <div class="menu-items">
+                    <!-- Pastry Item 1 -->
+                    <div class="menu-item">
+                        <div class="item-number">01</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">سمبوسه بالجبن وشيبس عمان</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Cheese Sambousa with Omani Chips</span>
+                        </div>
+                        <p class="item-desc">معجنات مقرمشة محشوة بالجبن، تُقدّم مع رقائق عمانية</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>18.00</p>
+                    </div>
+
+                    <!-- Pastry Item 2 -->
+                    <div class="menu-item">
+                        <div class="item-number">02</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">خلية النحل بالجبن</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Beehive with Cheese</span>
+                        </div>
+                        <p class="item-desc">معجنات قرص العسل المقرمشة المحشوة بالجبن</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>20.00</p>
+                    </div>
+
+                    <!-- Pastry Item 3 -->
+                    <div class="menu-item">
+                        <div class="item-number">03</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">كيكة الكرك</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Karak Cake</span>
+                        </div>
+                        <p class="item-desc">معجنات قرص العسل بنكهة شاي الكرك الفاخرة</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>7.00</p>
+                    </div>
+
+                    <!-- Pastry Item 4 -->
+                    <div class="menu-item">
+                        <div class="item-number">04</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">خلية النحل بالكرواسون</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Croissant Beehive</span>
+                        </div>
+                        <p class="item-desc">معجنات قرص العسل الرقيقة المصنوعة من عجينة الكرواسون</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>20.00</p>
+                    </div>
+
+                    <!-- Pastry Item 5 -->
+                    <div class="menu-item">
+                        <div class="item-number">05</div>
+                        <div class="item-name">
+                            <span class="item-name-ar">كريم كراميل</span>
+                        </div>
+                        <div class="item-name">
+                            <span class="item-name-en">Crème Caramel</span>
+                        </div>
+                        <p class="item-desc">كريم كراميل يذوب في الفم بطعمه الغني والناعم</p>
+                        <p class="item-price"><span class="currency-logo">AED</span>11.00</p>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <section id="cold-beverages" class="menu-section">
-            <h2 class="section-title">المشروبات الباردة</h2>
-            <div class="menu-items">
-                <!-- Cold Beverage Item 1 -->
-                <div class="menu-item">
-                    <div class="item-number">01</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">كركديه</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Hibiscus</span>
-                    </div>
-                    <p class="item-desc">مشروب الكركديه المنعش، يُقدّم بارداً</p>
-                    <p class="item-price"><span class="currency-logo">D</span>12.00</p>
+        <footer id="تواصل-معنا">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Madinat Zayed - مدينة زايد الظفرة</span>
                 </div>
-
-                <!-- Cold Beverage Item 2 -->
-                <div class="menu-item">
-                    <div class="item-number">02</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">شاي مثلج</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Iced Tea</span>
-                    </div>
-                    <p class="item-desc">ليمون\خوخ - مشروب الشاي المثلج المنعش، يُقدّم بارداً</p>
-                    <p class="item-price"><span class="currency-logo">D</span>10.00</p>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+971 50 532 4404</span>
                 </div>
-
-                <!-- Cold Beverage Item 3 -->
-                <div class="menu-item">
-                    <div class="item-number">03</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">اساي سموذي</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Acai Smoothie</span>
-                    </div>
-                    <p class="item-desc">سموذي الاساي المثلج المنعش، يُقدّم بارداً</p>
-                    <p class="item-price"><span class="currency-logo">D</span>15.00</p>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Open daily: 8AM - 11PM</span>
                 </div>
             </div>
-        </section>
 
-        <div class="decorative-divider">
-            <i class="fas fa-cookie-bite"></i>
-        </div>
-
-        <section id="pastries" class="menu-section">
-            <h2 class="section-title">حلويات ومعجنات ريزا</h2>
-            <div class="menu-items">
-                <!-- Pastry Item 1 -->
-                <div class="menu-item">
-                    <div class="item-number">01</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">سمبوسه بالجبن وشيبس عمان</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Cheese Sambousa with Omani Chips</span>
-                    </div>
-                    <p class="item-desc">معجنات مقرمشة محشوة بالجبن، تُقدّم مع رقائق عمانية</p>
-                    <p class="item-price"><span class="currency-logo">D</span>18.00</p>
-                </div>
-
-                <!-- Pastry Item 2 -->
-                <div class="menu-item">
-                    <div class="item-number">02</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">خلية النحل بالجبن</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Beehive with Cheese</span>
-                    </div>
-                    <p class="item-desc">معجنات قرص العسل المقرمشة المحشوة بالجبن</p>
-                    <p class="item-price"><span class="currency-logo">D</span>20.00</p>
-                </div>
-
-                <!-- Pastry Item 3 -->
-                <div class="menu-item">
-                    <div class="item-number">03</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">كيكة الكرك</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Karak Cake</span>
-                    </div>
-                    <p class="item-desc">معجنات قرص العسل بنكهة شاي الكرك الفاخرة</p>
-                    <p class="item-price"><span class="currency-logo">D</span>7.00</p>
-                </div>
-
-                <!-- Pastry Item 4 -->
-                <div class="menu-item">
-                    <div class="item-number">04</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">خلية النحل بالكرواسون</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Croissant Beehive</span>
-                    </div>
-                    <p class="item-desc">معجنات قرص العسل الرقيقة المصنوعة من عجينة الكرواسون</p>
-                    <p class="item-price"><span class="currency-logo">D</span>20.00</p>
-                </div>
-
-                <!-- Pastry Item 5 -->
-                <div class="menu-item">
-                    <div class="item-number">05</div>
-                    <div class="item-name">
-                        <span class="item-name-ar">كريم كراميل</span>
-                    </div>
-                    <div class="item-name">
-                        <span class="item-name-en">Crème Caramel</span>
-                    </div>
-                    <p class="item-desc">كريم كراميل يذوب في الفم بطعمه الغني والناعم</p>
-                    <p class="item-price"><span class="currency-logo">D</span>11.00</p>
-                </div>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/rizateacafe" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/@riza.tea.cafe" target="_blank" aria-label="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
             </div>
-        </section>
-    </div>
+            <p>© ٢٠٢٥ مقهى شاي ريزا. جميع الحقوق محفوظة.</p>
+            <p>© 2025 Shai Riza Cafe. All rights reserved.</p>
+        </footer>
 
-    <footer id="تواصل-معنا">
-        <div class="contact-info">
-            <div class="contact-item">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Madinat Zayed - مدينة زايدالظفرة</span>
-            </div>
-            <div class="contact-item">
-                <i class="fas fa-phone"></i>
-                <span>+971</span>
-            </div>
-            <div class="contact-item">
-                <i class="fas fa-clock"></i>
-                <span>Open daily: 8AM - 11PM</span>
-            </div>
-        </div>
+        <script>
+            // Enhanced JavaScript for navigation effect
+            document.addEventListener('DOMContentLoaded', function() {
+                const navLinks = document.querySelectorAll('nav a');
+                const sections = document.querySelectorAll('.menu-section, footer');
 
-        <div class="social-icons">
-            <a href="https://www.instagram.com/rizateacafe" target="_blank" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://www.tiktok.com/@riza.tea.cafe" target="_blank" aria-label="TikTok">
-                <i class="fab fa-tiktok"></i>
-            </a>
-        </div>
+                // Update active nav link based on scroll position
+                function updateActiveNav() {
+                    let currentSection = '';
 
-        <p>© 2025 Shai Riza Cafe. All rights reserved.</p>
-    </footer>
+                    sections.forEach(section => {
+                        const sectionTop = section.offsetTop;
+                        const sectionHeight = section.clientHeight;
 
-    <script>
-        // Enhanced JavaScript for navigation effect
-        document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('nav a');
-            const sections = document.querySelectorAll('.menu-section, footer');
+                        if (pageYOffset >= (sectionTop - 100)) {
+                            currentSection = section.getAttribute('id');
+                        }
+                    });
 
-            // Update active nav link based on scroll position
-            function updateActiveNav() {
-                let currentSection = '';
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === currentSection) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
 
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
+                // Initial call to set active nav
+                updateActiveNav();
 
-                    if (pageYOffset >= (sectionTop - 100)) {
-                        currentSection = section.getAttribute('id');
-                    }
+                // Update active nav on scroll
+                window.addEventListener('scroll', updateActiveNav);
+
+                // Smooth scrolling for navigation links
+                document.querySelectorAll('nav a').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        const targetId = this.getAttribute('href');
+                        const targetSection = document.querySelector(targetId);
+
+                        // Update active nav link
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+
+                        // Smooth scroll to target
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    });
                 });
 
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').substring(1) === currentSection) {
-                        link.classList.add('active');
-                    }
-                });
-            }
+                // Add subtle animation to menu items on hover
+                const menuItems = document.querySelectorAll('.menu-item');
+                menuItems.forEach(item => {
+                    item.addEventListener('mouseenter', () => {
+                        item.style.transform = 'translateY(-5px)';
+                    });
 
-            // Initial call to set active nav
-            updateActiveNav();
-
-            // Update active nav on scroll
-            window.addEventListener('scroll', updateActiveNav);
-
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('nav a').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const targetId = this.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
-
-                    // Update active nav link
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-
-                    // Smooth scroll to target
-                    window.scrollTo({
-                        top: targetSection.offsetTop - 20,
-                        behavior: 'smooth'
+                    item.addEventListener('mouseleave', () => {
+                        item.style.transform = 'translateY(0)';
                     });
                 });
             });
-
-            // Add subtle animation to menu items on hover
-            const menuItems = document.querySelectorAll('.menu-item');
-            menuItems.forEach(item => {
-                item.addEventListener('mouseenter', () => {
-                    item.style.transform = 'translateY(-5px)';
-                });
-
-                item.addEventListener('mouseleave', () => {
-                    item.style.transform = 'translateY(0)';
-                });
-            });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 
 </html>
