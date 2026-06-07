@@ -47,6 +47,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 
 .nav-logo { display: flex; align-items: center; gap: .6rem; }
 .nav-logo svg { height: 42px; width: auto; }
+.nav-logo-img {
+  height: 48px; width: auto;
+  /* remove black border: multiply blends black→transparent on light bg */
+  mix-blend-mode: multiply;
+  border-radius: 6px;
+}
 .nav-logo-text { line-height: 1.1; }
 .nav-logo-text .en { font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--black); letter-spacing: .1em; }
 .nav-logo-text .ar { font-size: .75rem; color: var(--muted); }
