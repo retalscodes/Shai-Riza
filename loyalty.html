@@ -277,13 +277,16 @@
       <div class="qr-label" data-i18n="loyalty_qr_hint">Show this QR to the cashier to add your stamp</div>
       <div id="qrcode"></div>
       <p class="qr-sub">📱 Let the cashier scan this to add your stamp</p>
-      <button class="save-btn" id="saveCardBtn">📥 Save Card to Photos</button>
+      <button class="save-btn" id="saveCardBtn">📥 Save Card as Image</button>
     </div>
 
     <!-- WALLET HINT -->
     <div class="wallet-hint">
-      <span class="wicon">💡</span>
-      <span>Tap <strong>Save Card to Photos</strong> above, then add that photo to your Apple/Google Wallet as a pass image — or just screenshot the card!</span>
+      <span class="wicon">📲</span>
+      <div>
+        <strong style="color:#1A0600;display:block;margin-bottom:.3rem">Add to Apple Wallet</strong>
+        <span>Download the free <strong>Pass2U Wallet</strong> app → tap "+" → "Create from QR/Barcode" → scan the QR above. Your Riza Tea card will live in your Wallet.</span>
+      </div>
     </div>
 
     <!-- HISTORY -->
@@ -491,63 +494,157 @@ function showRegister(phone){
   registerBox.classList.add('show');
 }
 
-/* ── Save card as image ─────────────────── */
+/* ── Draw card to Canvas → download as PNG ── */
+async function drawCardCanvas(phone, name, stamps){
+  const SIZE   = 600, H = 820;
+  const c      = document.createElement('canvas');
+  c.width = SIZE; c.height = H;
+  const ctx    = c.getContext('2d');
+
+  // background
+  ctx.fillStyle = '#FFFBF0';
+  ctx.beginPath();
+  ctx.roundRect(0,0,SIZE,H,28);
+  ctx.fill();
+
+  // dark header
+  ctx.fillStyle = '#1A0600';
+  ctx.beginPath();
+  ctx.roundRect(0,0,SIZE,140,{upperLeft:28,upperRight:28,lowerLeft:0,lowerRight:0});
+  ctx.fill();
+
+  // brand text
+  ctx.fillStyle = '#FEDF00';
+  ctx.font      = 'bold 36px serif';
+  ctx.fillText('Riza Tea', 36, 68);
+  ctx.fillStyle = 'rgba(254,223,0,0.55)';
+  ctx.font      = '18px serif';
+  ctx.fillText('شاي ريزا', 36, 96);
+
+  // stamps counter
+  ctx.fillStyle = 'rgba(254,223,0,0.55)';
+  ctx.font      = '11px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('STAMPS', SIZE-36, 68);
+  ctx.fillStyle = '#FEDF00';
+  ctx.font      = 'bold 42px sans-serif';
+  ctx.fillText(`${stamps}/10`, SIZE-36, 112);
+  ctx.textAlign = 'left';
+
+  // stamp cups grid (2 rows × 5)
+  const cupSize = 72, gap = 16;
+  const gridW   = 5*cupSize + 4*gap;
+  const startX  = (SIZE - gridW)/2;
+  const startY  = 168;
+
+  for(let i=0;i<10;i++){
+    const col  = i%5, row = Math.floor(i/5);
+    const x    = startX + col*(cupSize+gap) + cupSize/2;
+    const y    = startY + row*(cupSize+gap) + cupSize/2;
+    const last = i===9;
+    const fill = i < stamps;
+
+    // circle background
+    ctx.beginPath();
+    ctx.arc(x, y, cupSize/2, 0, Math.PI*2);
+    if(fill && last)    { ctx.fillStyle='#FF8F00'; }
+    else if(fill)       { ctx.fillStyle='#FEDF00'; }
+    else                { ctx.fillStyle='rgba(26,6,0,0.07)'; }
+    ctx.fill();
+
+    // border
+    ctx.beginPath();
+    ctx.arc(x, y, cupSize/2, 0, Math.PI*2);
+    ctx.strokeStyle = fill ? (last?'#FF8F00':'#FEDF00') : 'rgba(26,6,0,0.15)';
+    ctx.lineWidth   = 2;
+    ctx.stroke();
+
+    // emoji
+    ctx.font      = '30px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = fill ? '#1A0600' : 'rgba(26,6,0,0.2)';
+    ctx.fillText(last ? '🎁' : (fill ? '☕' : '·'), x, y+1);
+  }
+  ctx.textBaseline = 'alphabetic';
+
+  // divider
+  ctx.strokeStyle = 'rgba(26,6,0,0.08)';
+  ctx.lineWidth   = 1;
+  ctx.beginPath();
+  ctx.moveTo(36, startY + 2*(cupSize+gap) + 12);
+  ctx.lineTo(SIZE-36, startY + 2*(cupSize+gap) + 12);
+  ctx.stroke();
+
+  // customer name / phone
+  const nameY = startY + 2*(cupSize+gap) + 48;
+  ctx.fillStyle = '#BBA840';
+  ctx.font      = '11px sans-serif';
+  ctx.letterSpacing = '0.12em';
+  ctx.fillText('NAME', 36, nameY);
+  ctx.letterSpacing = '0';
+  ctx.fillStyle = '#1A0600';
+  ctx.font      = 'bold 26px sans-serif';
+  ctx.fillText(name, 36, nameY+32);
+  ctx.fillStyle = '#BBA840';
+  ctx.font      = '16px sans-serif';
+  ctx.fillText(phone, 36, nameY+56);
+
+  // QR code section — grab from existing rendered QR on page
+  const qrImg = $('qrcode').querySelector('img') || $('qrcode').querySelector('canvas');
+  if(qrImg){
+    const qrSize = 170;
+    const qrX    = (SIZE - qrSize)/2;
+    const qrY    = nameY + 80;
+
+    // white bg for QR
+    ctx.fillStyle   = '#fff';
+    ctx.beginPath();
+    ctx.roundRect(qrX-12, qrY-12, qrSize+24, qrSize+24, 12);
+    ctx.fill();
+
+    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+    ctx.fillStyle = '#6B5500';
+    ctx.font      = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Show to cashier to add stamp', SIZE/2, qrY + qrSize + 22);
+    ctx.textAlign = 'left';
+  }
+
+  // bottom tag
+  ctx.fillStyle = '#FEDF00';
+  ctx.fillRect(0, H-40, SIZE, 40);
+  ctx.fillStyle = '#1A0600';
+  ctx.font      = 'bold 13px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('shai-riza.netlify.app  ·  Riza Tea Loyalty Card', SIZE/2, H-14);
+  ctx.textAlign = 'left';
+
+  return c;
+}
+
 $('saveCardBtn').addEventListener('click', async ()=>{
-  // Try html2canvas-lite approach via inline canvas drawing
-  const card = $('loyaltyCard');
+  const name   = $('cardName').textContent;
+  const phone  = $('cardPhone').textContent;
+  const stamps = parseInt($('stampsNow').textContent)||0;
 
-  // Fallback: open a printer-friendly version
-  const name  = $('cardName').textContent;
-  const phone = $('cardPhone').textContent;
-  const stamps= parseInt($('stampsNow').textContent)||0;
+  $('saveCardBtn').textContent = '⏳ Generating…';
+  $('saveCardBtn').disabled    = true;
 
-  const cups = Array.from({length:10},(_,i)=>
-    i < stamps ? '☕' : i===9 ? '🎁' : '○'
-  ).join(' ');
-
-  const w = window.open('','_blank','width=480,height=700');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Riza Tea Card</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#f5f0e0;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:1rem;font-family:'Inter',sans-serif}
-    .card{background:#FFFBF0;border-radius:24px;overflow:hidden;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-    .top{background:#1A0600;padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center}
-    .brand{color:#FEDF00;font-family:'Playfair Display',serif;font-size:1.2rem}
-    .brand-ar{color:rgba(254,223,0,.6);font-size:.7rem}
-    .sc .sl{font-size:.6rem;color:rgba(254,223,0,.6);letter-spacing:.1em;text-transform:uppercase}
-    .sc .sv{font-size:1.4rem;font-weight:800;color:#FEDF00}
-    .body{padding:1.4rem 1.5rem}
-    .cups{font-size:1.8rem;letter-spacing:.15rem;margin-bottom:1.2rem;line-height:1.6}
-    .nl{font-size:.6rem;color:#BBA840;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem}
-    .nv{font-size:1rem;font-weight:700;color:#1A0600}
-    .ph{font-size:.78rem;color:#BBA840}
-    .qr-wrap{text-align:center;padding:1.2rem;background:#fff;border-top:1px solid rgba(26,6,0,.06)}
-    .qr-label{font-size:.65rem;color:#6B5500;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:.8rem}
-    img.qr{border-radius:10px}
-    .save-hint{font-size:.72rem;color:#BBA840;margin-top:.8rem;text-align:center;padding:0 1rem 1rem}
-  </style></head><body>
-  <div class="card">
-    <div class="top">
-      <div><div class="brand">Riza Tea</div><div class="brand-ar">شاي ريزا</div></div>
-      <div class="sc"><div class="sl">Stamps</div><div class="sv">${stamps}/10</div></div>
-    </div>
-    <div class="body">
-      <div class="cups">${cups}</div>
-      <div class="nl">Name</div><div class="nv">${name}</div><div class="ph">${phone}</div>
-    </div>
-    <div class="qr-wrap">
-      <div class="qr-label">Show to cashier to add stamp</div>
-      <div id="qr"></div>
-    </div>
-    <div class="save-hint">📸 Screenshot this page and save to your phone!</div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"><\/script>
-  <script>new QRCode($('qr'),{text:'RIZATEA:${phone}',width:200,height:200,colorDark:'#1A0600',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})<\/script>
-  </body></html>`);
-  w.document.close();
+  try{
+    const canvas = await drawCardCanvas(phone, name, stamps);
+    const link   = document.createElement('a');
+    link.download = `riza-tea-card-${phone}.png`;
+    link.href     = canvas.toDataURL('image/png');
+    link.click();
+  } catch(e){
+    console.error('Card draw error:', e);
+    showToast('Could not generate image — try screenshotting instead', 'error');
+  } finally {
+    $('saveCardBtn').textContent = '📥 Save Card as Image';
+    $('saveCardBtn').disabled    = false;
+  }
 });
 
 /* ── events ─────────────────────────────── */
