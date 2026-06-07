@@ -17,12 +17,15 @@ exports.handler = async (event) => {
     return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: 'Cashier password not configured' }) };
   }
 
-  if (password.trim() !== cashierPassword.trim()) {
-    console.log('Cashier login attempt failed — password mismatch');
+  const received = password.trim();
+  const expected = cashierPassword.trim();
+  console.log(`Cashier login — received.length=${received.length} expected.length=${expected.length} match=${received === expected}`);
+
+  if (received !== expected) {
     return { statusCode: 401, headers: cors(), body: JSON.stringify({ error: 'Incorrect password' }) };
   }
 
-  const token = crypto.createHmac('sha256', cashierPassword).update('riza-cashier').digest('hex');
+  const token = crypto.createHmac('sha256', expected).update('riza-cashier').digest('hex');
   console.log('Cashier login successful');
   return { statusCode: 200, headers: cors(), body: JSON.stringify({ token }) };
 };

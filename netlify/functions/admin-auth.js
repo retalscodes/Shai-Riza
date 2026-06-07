@@ -17,13 +17,15 @@ exports.handler = async (event) => {
     return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: 'Admin password not configured' }) };
   }
 
-  // Trim both sides in case of accidental whitespace in env var
-  if (password.trim() !== adminPassword.trim()) {
-    console.log('Login attempt failed — password mismatch');
+  const received = password.trim();
+  const expected = adminPassword.trim();
+  console.log(`Admin login — received.length=${received.length} expected.length=${expected.length} match=${received === expected}`);
+
+  if (received !== expected) {
     return { statusCode: 401, headers: cors(), body: JSON.stringify({ error: 'Incorrect password' }) };
   }
 
-  const token = crypto.createHmac('sha256', adminPassword).update('riza-admin').digest('hex');
+  const token = crypto.createHmac('sha256', expected).update('riza-admin').digest('hex');
   console.log('Admin login successful');
   return { statusCode: 200, headers: cors(), body: JSON.stringify({ token }) };
 };
