@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loyalty Card | Riza Tea</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .loyalty-page {
+      min-height: 100vh;
+      padding: 100px 1.5rem 4rem;
+      background: radial-gradient(ellipse at center, rgba(200,134,10,.08), transparent 60%);
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    /* LOOKUP FORM */
+    .lookup-box {
+      width: 100%; max-width: 420px;
+      background: var(--card); border: 1px solid rgba(200,134,10,.2);
+      border-radius: calc(var(--radius)*1.5); padding: 2.5rem;
+      text-align: center; margin-bottom: 2rem;
+    }
+    .lookup-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .lookup-box h2 {
+      font-family: 'Playfair Display', 'Noto Serif Arabic', serif;
+      font-size: 1.6rem; color: var(--cream); margin-bottom: .5rem;
+    }
+    .lookup-box p { color: var(--muted); font-size: .9rem; margin-bottom: 1.8rem; line-height: 1.6; }
+    .lookup-input-wrap { position: relative; margin-bottom: 1rem; }
+    .lookup-input {
+      width: 100%; padding: .9rem 1rem;
+      background: var(--bg); border: 1px solid rgba(200,134,10,.3);
+      border-radius: 10px; color: var(--cream); font-size: 1rem;
+      text-align: center; letter-spacing: .08em;
+      outline: none; transition: border-color .3s;
+    }
+    .lookup-input:focus { border-color: var(--gold); }
+    .lookup-input::placeholder { letter-spacing: 0; }
+
+    /* CARD */
+    .card-wrap {
+      width: 100%; max-width: 480px; margin: 0 auto;
+      display: none; flex-direction: column; align-items: center; gap: 1.5rem;
+    }
+    .card-wrap.visible { display: flex; animation: fadeUp .5s ease both; }
+
+    .loyalty-card {
+      width: 100%;
+      background: linear-gradient(135deg, #1C0E02, #2d1800);
+      border: 1px solid rgba(200,134,10,.4);
+      border-radius: 20px; padding: 2rem;
+      position: relative; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+    .loyalty-card::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,134,10,.15), transparent 70%);
+    }
+    .loyalty-card::after {
+      content: '';
+      position: absolute; bottom: -40px; left: -40px;
+      width: 150px; height: 150px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,58,15,.2), transparent 70%);
+    }
+
+    .card-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 1.5rem; position: relative; z-index: 1;
+    }
+    .card-brand { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); }
+    .card-brand-ar { font-size: .8rem; color: var(--muted); }
+    .card-logo-mark {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 1.5px solid rgba(200,134,10,.5);
+      display: grid; place-items: center;
+      font-size: 1.4rem;
+    }
+
+    .card-name { font-size: 1.1rem; font-weight: 600; color: var(--cream); position: relative; z-index: 1; }
+    .card-phone { font-size: .82rem; color: var(--muted); margin-bottom: 1.5rem; position: relative; z-index: 1; }
+
+    .stamps-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: .7rem; position: relative; z-index: 1; margin-bottom: 1.5rem;
+    }
+    .stamp {
+      aspect-ratio: 1; border-radius: 50%;
+      border: 2px solid rgba(200,134,10,.3);
+      display: grid; place-items: center;
+      font-size: 1.3rem; transition: all .3s;
+      background: rgba(0,0,0,.2);
+      position: relative;
+    }
+    .stamp.filled {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(200,134,10,.4);
+    }
+    .stamp.filled::after {
+      content: '☕';
+      font-size: 1.1rem;
+    }
+    .stamp:not(.filled)::after { content: ''; }
+    .stamp.reward {
+      border-color: var(--gold-lt);
+      background: rgba(200,134,10,.1);
+    }
+    .stamp.reward::after { content: '🎁'; }
+    .stamp.reward.filled {
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      animation: pulse 1.5s ease infinite;
+    }
+    .stamp.pop { animation: popIn .4s ease both; }
+    @keyframes popIn { 0%{transform:scale(0)}60%{transform:scale(1.25)}100%{transform:scale(1)} }
+
+    .card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(200,134,10,.15);
+    }
+    .card-progress { font-size: .82rem; color: var(--muted); }
+    .card-progress strong { color: var(--gold); }
+    .card-total { font-size: .78rem; color: rgba(200,134,10,.5); }
+
+    /* FREE DRINK banner */
+    .free-drink-banner {
+      display: none;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      color: #0F0700; border-radius: 12px; padding: 1.2rem 1.5rem;
+      text-align: center; font-weight: 600; width: 100%;
+      animation: fadeUp .5s ease both;
+    }
+    .free-drink-banner.show { display: block; }
+    .free-drink-banner .big { font-size: 1.5rem; margin-bottom: .3rem; }
+
+    /* REGISTER FORM */
+    .register-box {
+      width: 100%; max-width: 420px;
+      background: var(--card); border: 1px solid rgba(200,134,10,.2);
+      border-radius: calc(var(--radius)*1.5); padding: 2rem;
+      display: none; text-align: center;
+    }
+    .register-box.show { display: block; animation: fadeUp .4s ease both; }
+    .register-box h3 { font-family: 'Playfair Display', serif; color: var(--cream); margin-bottom: .5rem; }
+    .register-box p { color: var(--muted); font-size: .87rem; margin-bottom: 1.5rem; }
+
+    /* HISTORY */
+    .history-section {
+      width: 100%; max-width: 480px; display: none;
+    }
+    .history-section.show { display: block; }
+    .history-title {
+      font-size: .85rem; color: var(--muted); letter-spacing: .08em;
+      text-transform: uppercase; margin-bottom: .8rem;
+    }
+    .history-item {
+      display: flex; justify-content: space-between;
+      padding: .6rem .8rem; border-radius: 8px;
+      background: var(--card); margin-bottom: .4rem;
+      font-size: .83rem;
+    }
+    .history-item .hdate { color: var(--muted); }
+    .history-item .htype { color: var(--cream); }
+    .history-item .htype.redeem { color: var(--gold); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 12px rgba(200,134,10,.4)} 50%{box-shadow:0 0 24px rgba(200,134,10,.8)} }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 42 42" fill="none"><circle cx="21" cy="21" r="20" stroke="#C8860A" stroke-width="1.5"/><text x="21" y="26" font-family="serif" font-size="16" fill="#C8860A" text-anchor="middle">ر</text></svg>
+    <div class="nav-logo-text"><div class="en">RIZA TEA</div><div class="ar">شاي ريزا</div></div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+    <li><a href="menu.html" data-i18n="nav_menu">Menu</a></li>
+    <li><a href="loyalty.html" class="active" data-i18n="nav_loyalty">Loyalty Card</a></li>
+    <li><a href="index.html#contact" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-lang" id="langToggle">عربي</button>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="loyalty-page">
+
+  <!-- LOOKUP -->
+  <div class="lookup-box" id="lookupBox">
+    <div class="lookup-icon">🎁</div>
+    <h2 data-i18n="loyalty_title">Your Loyalty Card</h2>
+    <p data-i18n="loyalty_sub">Enter your phone number to see your stamps and rewards. Every drink brings you closer to a free one!</p>
+    <div class="lookup-input-wrap">
+      <input type="tel" class="lookup-input" id="phoneInput"
+        placeholder="e.g. 05xxxxxxxx" maxlength="15" autocomplete="tel"/>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" id="lookupBtn" data-i18n="loyalty_lookup_btn">
+      Find My Card
+    </button>
+    <p style="margin-top:1rem;font-size:.8rem;color:var(--muted)" data-i18n="loyalty_new_hint">
+      New customer? We'll create your card automatically.
+    </p>
+  </div>
+
+  <!-- CARD VIEW -->
+  <div class="card-wrap" id="cardWrap">
+
+    <div class="free-drink-banner" id="freeDrinkBanner">
+      <div class="big">🎉 Free Drink Earned!</div>
+      <div data-i18n="loyalty_free_msg">Show this to the cashier to claim your free drink.</div>
+    </div>
+
+    <div class="loyalty-card" id="loyaltyCard">
+      <div class="card-header">
+        <div>
+          <div class="card-brand">Riza Tea</div>
+          <div class="card-brand-ar">شاي ريزا</div>
+        </div>
+        <div class="card-logo-mark">☕</div>
+      </div>
+      <div class="card-name" id="cardName">—</div>
+      <div class="card-phone" id="cardPhone">—</div>
+      <div class="stamps-grid" id="stampsGrid"></div>
+      <div class="card-footer">
+        <div class="card-progress">
+          <strong id="stampsCount">0</strong> / <span id="stampsGoal">10</span>
+          <span data-i18n="loyalty_stamps_label"> stamps</span>
+        </div>
+        <div class="card-total" id="totalEarned"></div>
+      </div>
+    </div>
+
+    <div class="history-section" id="historySection">
+      <div class="history-title" data-i18n="loyalty_history">Stamp History</div>
+      <div id="historyList"></div>
+    </div>
+
+    <button class="btn btn-outline btn-sm" id="switchCardBtn" data-i18n="loyalty_switch">
+      ← Use a different number
+    </button>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="register-box" id="registerBox">
+    <h3 data-i18n="loyalty_register_title">Welcome to Riza! 👋</h3>
+    <p data-i18n="loyalty_register_sub">First time here? Add your name to personalise your card.</p>
+    <input type="text" id="regName" placeholder="Your name (optional)" style="text-align:center;margin-bottom:1rem"/>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" id="registerBtn" data-i18n="loyalty_register_btn">
+      Create My Card
+    </button>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-logo">Riza Tea</div>
+  <div class="footer-copy">© 2025 Riza Tea</div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/loyalty.js"></script>
+</body>
+</html>

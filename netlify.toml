@@ -1,0 +1,70 @@
+[build]
+  functions = "netlify/functions"
+  publish = "."
+
+[[redirects]]
+  from = "/api/admin-auth"
+  to = "/.netlify/functions/admin-auth"
+  status = 200
+
+[[redirects]]
+  from = "/api/get-settings"
+  to = "/.netlify/functions/get-settings"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin-update-settings"
+  to = "/.netlify/functions/admin-update-settings"
+  status = 200
+
+[[redirects]]
+  from = "/api/get-menu"
+  to = "/.netlify/functions/get-menu"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin-menu-item"
+  to = "/.netlify/functions/admin-menu-item"
+  status = 200
+
+[[redirects]]
+  from = "/api/loyalty-lookup"
+  to = "/.netlify/functions/loyalty-lookup"
+  status = 200
+
+[[redirects]]
+  from = "/api/loyalty-register"
+  to = "/.netlify/functions/loyalty-register"
+  status = 200
+
+[[redirects]]
+  from = "/api/loyalty-stamp"
+  to = "/.netlify/functions/loyalty-stamp"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin-stats"
+  to = "/.netlify/functions/admin-stats"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin-customers"
+  to = "/.netlify/functions/admin-customers"
+  status = 200
+
+[[redirects]]
+  from = "/api/upload-image"
+  to = "/.netlify/functions/upload-image"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

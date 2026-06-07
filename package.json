@@ -1,0 +1,12 @@
+{
+  "name": "riza-tea",
+  "version": "1.0.0",
+  "description": "Riza Tea — website, digital menu, and loyalty card system",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

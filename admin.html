@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin | Riza Tea</title>
+  <link rel="stylesheet" href="css/admin.css"/>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="login-logo">☕ RIZA TEA <span>Admin Panel</span></div>
+    <h1>Welcome back</h1>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Enter admin password" autocomplete="current-password"/>
+    </div>
+    <button class="btn btn-primary btn-full mt-2" id="loginBtn">Login →</button>
+    <div id="loginError" style="color:#e74c3c;font-size:.82rem;margin-top:.8rem;display:none">
+      Incorrect password. Please try again.
+    </div>
+  </div>
+</div>
+
+<!-- MAIN ADMIN -->
+<div class="admin-layout" id="adminLayout" style="display:none">
+
+  <!-- OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">☕ Riza Tea <span>Admin Panel</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-group-label">Overview</div>
+      <a class="sidebar-link active" data-page="dashboard" href="#">
+        <span class="icon">📊</span> Dashboard
+      </a>
+
+      <div class="nav-group-label">Content</div>
+      <a class="sidebar-link" data-page="menu" href="#">
+        <span class="icon">📋</span> Menu
+      </a>
+      <a class="sidebar-link" data-page="gallery" href="#">
+        <span class="icon">🖼️</span> Gallery
+      </a>
+      <a class="sidebar-link" data-page="special" href="#">
+        <span class="icon">⭐</span> Today's Special
+      </a>
+      <a class="sidebar-link" data-page="about" href="#">
+        <span class="icon">📝</span> About & Hours
+      </a>
+
+      <div class="nav-group-label">Loyalty</div>
+      <a class="sidebar-link" data-page="loyalty" href="#">
+        <span class="icon">🎁</span> Stamp Customers
+      </a>
+      <a class="sidebar-link" data-page="customers" href="#">
+        <span class="icon">👥</span> All Customers
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="index.html" class="sidebar-link"><span class="icon">🌐</span> View Website</a>
+      <button class="sidebar-link" id="logoutBtn" style="width:100%"><span class="icon">🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="topbar">
+      <div style="display:flex;align-items:center">
+        <button class="menu-toggle-btn" id="menuToggle">☰</button>
+        <div>
+          <div class="topbar-title" id="pageTitle">Dashboard</div>
+          <div class="topbar-sub" id="pageSubtitle">Good to see you 👋</div>
+        </div>
+      </div>
+      <div style="font-size:.82rem;color:var(--muted)" id="topbarDate"></div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard">
+        <div class="stats-row" id="statsRow">
+          <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-value" id="statCustomers">—</div></div>
+          <div class="stat-card"><div class="stat-label">Stamps Given</div><div class="stat-value" id="statStamps">—</div></div>
+          <div class="stat-card"><div class="stat-label">Free Drinks Earned</div><div class="stat-value" id="statFree">—</div></div>
+          <div class="stat-card"><div class="stat-label">Menu Items</div><div class="stat-value" id="statMenu">—</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">🕐 Recent Stamps</div>
+            <div id="recentStamps"><div class="text-muted text-sm">Loading…</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">⭐ Quick Actions</div>
+            <div style="display:flex;flex-direction:column;gap:.7rem">
+              <button class="btn btn-outline" onclick="showPage('loyalty')">🎁 Add a Stamp</button>
+              <button class="btn btn-outline" onclick="showPage('special')">⭐ Update Today's Special</button>
+              <button class="btn btn-outline" onclick="showPage('menu')">📋 Edit Menu</button>
+              <button class="btn btn-outline" onclick="showPage('gallery')">🖼️ Manage Gallery</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU EDITOR -->
+      <div id="page-menu" style="display:none">
+        <div class="card">
+          <div class="flex-between" style="margin-bottom:1.2rem">
+            <div class="card-title" style="margin-bottom:0">📋 Menu Items</div>
+            <button class="btn btn-primary btn-sm" id="addItemBtn">+ Add Item</button>
+          </div>
+
+          <div class="menu-categories" id="adminMenuCats">
+            <button class="cat-tab active" data-cat="all">All</button>
+            <button class="cat-tab" data-cat="tea">Hot Tea</button>
+            <button class="cat-tab" data-cat="coffee">Coffee</button>
+            <button class="cat-tab" data-cat="cold">Cold Drinks</button>
+            <button class="cat-tab" data-cat="acai">Acai</button>
+            <button class="cat-tab" data-cat="breakfast">Breakfast</button>
+            <button class="cat-tab" data-cat="desserts">Desserts</button>
+          </div>
+
+          <div class="table-wrap">
+            <table id="menuTable">
+              <thead>
+                <tr>
+                  <th>Name (EN)</th>
+                  <th>Name (AR)</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Available</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="menuTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ADD/EDIT ITEM FORM -->
+        <div class="card mt-3" id="itemForm" style="display:none">
+          <div class="card-title" id="itemFormTitle">Add Menu Item</div>
+          <input type="hidden" id="editItemId"/>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name (English)</label>
+              <input type="text" id="itemNameEn" placeholder="e.g. Karak Chai"/>
+            </div>
+            <div class="form-group">
+              <label>Name (Arabic)</label>
+              <input type="text" id="itemNameAr" dir="rtl" placeholder="e.g. كرك تشاي"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category</label>
+              <select id="itemCategory">
+                <option value="tea">Hot Tea</option>
+                <option value="coffee">Coffee</option>
+                <option value="cold">Cold Drinks</option>
+                <option value="acai">Acai</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="desserts">Desserts & Snacks</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Price (AED) — leave empty for custom label</label>
+              <input type="number" id="itemPrice" placeholder="e.g. 3.50" step="0.5" min="0"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Price Label (optional — overrides price, e.g. "AED 1.2 / 1.5")</label>
+            <input type="text" id="itemPriceLabel" placeholder="AED 1.2 / 1.5"/>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Description (English)</label>
+              <textarea id="itemDescEn" placeholder="Short description…" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Description (Arabic)</label>
+              <textarea id="itemDescAr" dir="rtl" placeholder="وصف قصير…" rows="2"></textarea>
+            </div>
+          </div>
+          <div class="form-group flex-center">
+            <label class="toggle"><input type="checkbox" id="itemAvailable" checked/><span class="toggle-slider"></span></label>
+            <span style="color:var(--cream);font-size:.9rem">Available</span>
+          </div>
+          <div style="display:flex;gap:.8rem;margin-top:1rem">
+            <button class="btn btn-primary" id="saveItemBtn">Save Item</button>
+            <button class="btn btn-outline" onclick="document.getElementById('itemForm').style.display='none'">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GALLERY -->
+      <div id="page-gallery" style="display:none">
+        <div class="card">
+          <div class="card-title">🖼️ Gallery Photos</div>
+          <div class="upload-zone" id="uploadZone">
+            <div class="icon">📤</div>
+            <p>Drag & drop photos here, or <strong>click to browse</strong></p>
+            <p style="font-size:.75rem;margin-top:.4rem">JPG, PNG, WebP — max 5 MB each</p>
+          </div>
+          <input type="file" id="galleryFileInput" accept="image/*" multiple style="display:none"/>
+          <div class="gallery-grid-admin" id="adminGalleryGrid"></div>
+        </div>
+      </div>
+
+      <!-- TODAY'S SPECIAL -->
+      <div id="page-special" style="display:none">
+        <div class="card" style="max-width:600px">
+          <div class="card-title">⭐ Today's Special</div>
+          <div class="form-group flex-center">
+            <label class="toggle"><input type="checkbox" id="specialEnabled"/><span class="toggle-slider"></span></label>
+            <span style="color:var(--cream);font-size:.9rem">Show special banner on homepage</span>
+          </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="specialTitle" placeholder="e.g. Today's Special"/>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="specialText" placeholder="e.g. Saffron Karak with dates — perfect morning combo"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Price (AED) — optional</label>
+            <input type="number" id="specialPrice" placeholder="e.g. 5.00" step="0.5" min="0"/>
+          </div>
+          <button class="btn btn-primary" id="saveSpecialBtn">Save Special</button>
+        </div>
+      </div>
+
+      <!-- ABOUT & HOURS -->
+      <div id="page-about" style="display:none">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">📝 About Text</div>
+            <div class="form-group">
+              <label>Paragraph 1</label>
+              <textarea id="aboutP1" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Paragraph 2</label>
+              <textarea id="aboutP2" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>About Section Photo URL</label>
+              <input type="text" id="aboutImage" placeholder="https://…"/>
+              <div class="form-hint">Paste the URL of an uploaded photo</div>
+            </div>
+            <button class="btn btn-primary" id="saveAboutBtn">Save About</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🕐 Opening Hours</div>
+            <div class="hours-editor" id="hoursEditor"></div>
+            <button class="btn btn-primary mt-3" id="saveHoursBtn">Save Hours</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOYALTY – STAMP -->
+      <div id="page-loyalty" style="display:none">
+        <div style="max-width:500px">
+          <div class="card">
+            <div class="card-title">🎁 Add a Stamp</div>
+            <div class="form-group">
+              <label>Customer Phone Number</label>
+              <div class="search-box">
+                <span class="search-icon">📱</span>
+                <input type="tel" id="stampPhone" placeholder="e.g. 05xxxxxxxx"/>
+              </div>
+            </div>
+            <button class="btn btn-primary" id="findCustomerBtn" style="width:100%;justify-content:center">
+              Find Customer
+            </button>
+          </div>
+
+          <div id="stampCustomerCard" style="display:none;margin-top:1.2rem">
+            <div class="customer-card-admin">
+              <div class="cname" id="stampCustomerName"></div>
+              <div class="cphone" id="stampCustomerPhone"></div>
+              <div class="stamp-row-admin" id="stampDots"></div>
+              <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.5rem">
+                <button class="btn btn-success" id="addStampBtn">☕ Add Stamp</button>
+                <button class="btn btn-danger" id="redeemBtn" style="display:none">🎁 Redeem Free Drink</button>
+              </div>
+              <div class="text-sm text-muted mt-1" id="stampStatus"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS LIST -->
+      <div id="page-customers" style="display:none">
+        <div class="card">
+          <div class="flex-between" style="margin-bottom:1.2rem">
+            <div class="card-title" style="margin-bottom:0">👥 All Customers</div>
+            <div class="search-box" style="width:240px">
+              <span class="search-icon">🔍</span>
+              <input type="search" id="customersSearch" placeholder="Search by name or phone…"/>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Current Stamps</th>
+                  <th>Total Collected</th>
+                  <th>Free Drinks</th>
+                  <th>Joined</th>
+                </tr>
+              </thead>
+              <tbody id="customersTableBody"></tbody>
+            </table>
+          </div>
+          <div id="customersEmpty" class="empty-state" style="display:none">
+            <span class="icon">👥</span>
+            <p>No customers yet</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-body -->
+  </div><!-- /main-content -->
+</div><!-- /admin-layout -->
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

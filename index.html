@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Riza Tea — a cozy tea house experience. Specialty teas, karak chai, cold drinks, and more."/>
+  <title>Riza Tea | شاي ريزا</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0F0700"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="21" cy="21" r="20" stroke="#C8860A" stroke-width="1.5"/>
+      <text x="21" y="26" font-family="serif" font-size="16" fill="#C8860A" text-anchor="middle">ر</text>
+    </svg>
+    <div class="nav-logo-text">
+      <div class="en">RIZA TEA</div>
+      <div class="ar">شاي ريزا</div>
+    </div>
+  </a>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active" data-i18n="nav_home">Home</a></li>
+    <li><a href="menu.html" data-i18n="nav_menu">Menu</a></li>
+    <li><a href="loyalty.html" data-i18n="nav_loyalty">Loyalty Card</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <button class="btn-lang" id="langToggle">عربي</button>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <canvas class="hero-particles" id="particles"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge">☕ <span data-i18n="hero_badge">Specialty Tea House</span></div>
+    <h1 class="hero-title">Riza <span>Tea</span></h1>
+    <div class="hero-title-ar" data-i18n-ar="شاي ريزا"></div>
+    <p class="hero-tagline" data-i18n="hero_tagline">
+      Where every sip tells a story. Handcrafted teas, bold karak, and flavors you won't find anywhere else.
+    </p>
+    <div class="hero-ctas">
+      <a href="menu.html" class="btn btn-primary">
+        <span>🍃</span> <span data-i18n="hero_cta1">Explore Menu</span>
+      </a>
+      <a href="loyalty.html" class="btn btn-outline">
+        <span>🎁</span> <span data-i18n="hero_cta2">My Loyalty Card</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- TODAY'S SPECIAL -->
+<div class="section" id="specialSection" style="padding-top:0"></div>
+
+<!-- FEATURED -->
+<section class="section reveal" id="featured">
+  <div class="section-label" data-i18n="featured_label">Our Favourites</div>
+  <h2 class="section-title" data-i18n="featured_title">Made to <span>Savour</span></h2>
+  <p class="section-sub" data-i18n="featured_sub">A curated taste of what makes Riza special — from our signature karak to refreshing cold blends.</p>
+  <div class="featured-grid" id="featuredGrid">
+    <!-- populated by JS -->
+    <div class="item-card">
+      <div class="item-card-icon">☕</div>
+      <div class="item-card-name">Karak Chai</div>
+      <div class="item-card-name-ar">كرك تشاي</div>
+      <div class="item-card-price">AED 1.2</div>
+    </div>
+    <div class="item-card">
+      <div class="item-card-icon">🌿</div>
+      <div class="item-card-name">Ghada Tea</div>
+      <div class="item-card-name-ar">شاي غادة</div>
+      <div class="item-card-price">AED 1</div>
+    </div>
+    <div class="item-card">
+      <div class="item-card-icon">🫐</div>
+      <div class="item-card-name">Blueberry Mojito</div>
+      <div class="item-card-name-ar">موهيتو بلوبيري</div>
+      <div class="item-card-price">AED 3.5</div>
+    </div>
+    <div class="item-card">
+      <div class="item-card-icon">🍵</div>
+      <div class="item-card-name">Iced Matcha</div>
+      <div class="item-card-name-ar">آيس ماتشا</div>
+      <div class="item-card-price">AED 4</div>
+    </div>
+    <div class="item-card">
+      <div class="item-card-icon">🫙</div>
+      <div class="item-card-name">Acai Signature</div>
+      <div class="item-card-name-ar">أساي سيغنتشر</div>
+      <div class="item-card-price">AED 5</div>
+    </div>
+    <div class="item-card">
+      <div class="item-card-icon">🥐</div>
+      <div class="item-card-name">Karak Cake</div>
+      <div class="item-card-name-ar">كيكة كرك</div>
+      <div class="item-card-price">AED 3</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:2.5rem">
+    <a href="menu.html" class="btn btn-outline" data-i18n="featured_more">View Full Menu →</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section reveal" id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap" id="aboutImg">
+      <div class="about-img-placeholder">
+        <span>☕</span>
+        <p style="color:var(--muted);font-size:.85rem">Photo coming soon</p>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-label" data-i18n="about_label">Our Story</div>
+      <h2 class="section-title" data-i18n="about_title">More Than <span>Tea</span></h2>
+      <p data-i18n="about_p1">Riza Tea was born from a love of warmth — the kind you feel in a quiet moment with the perfect cup. Every blend we serve is chosen with care, every sip crafted to bring you back.</p>
+      <p data-i18n="about_p2">From bold Iraqi teas to our famous saffron karak, our menu celebrates tradition while welcoming new flavours. Come sit with us.</p>
+
+      <h3 style="color:var(--gold);margin-top:2rem;margin-bottom:1rem;font-size:1rem" data-i18n="hours_title">Opening Hours</h3>
+      <div class="hours-grid" id="hoursGrid">
+        <!-- populated from settings -->
+        <div class="hours-row"><span class="day">Sat – Thu</span><span class="time">10:00 AM – 10:00 PM</span></div>
+        <div class="hours-row closed"><span class="day">Friday</span><span class="time">Closed</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<div class="gallery-section reveal" style="padding:clamp(3rem,6vw,5rem) 0">
+  <div style="max-width:1200px;margin:0 auto;padding:0 clamp(1rem,5vw,3rem);margin-bottom:2rem">
+    <div class="section-label" data-i18n="gallery_label">Moments</div>
+    <h2 class="section-title" data-i18n="gallery_title">From Our <span>Cup to Yours</span></h2>
+  </div>
+  <div class="gallery-grid" id="galleryGrid">
+    <!-- populated dynamically -->
+    <div class="gallery-item"><div class="gallery-placeholder">🍵</div></div>
+    <div class="gallery-item"><div class="gallery-placeholder">☕</div></div>
+    <div class="gallery-item"><div class="gallery-placeholder">🌿</div></div>
+    <div class="gallery-item"><div class="gallery-placeholder">🫐</div></div>
+  </div>
+</div>
+
+<!-- LOYALTY CTA -->
+<section class="section reveal">
+  <div class="loyalty-cta">
+    <div class="section-label" style="justify-content:center" data-i18n="loyalty_cta_label">Loyalty Programme</div>
+    <h2 data-i18n="loyalty_cta_title">Your <span style="color:var(--gold)">10th drink</span> is on us</h2>
+    <p data-i18n="loyalty_cta_sub">Collect a stamp with every drink you order. Fill your card and earn a free drink — no app needed, just your phone number.</p>
+    <div class="loyalty-stamps-preview">
+      <div class="stamp-preview filled">☕</div>
+      <div class="stamp-preview filled">☕</div>
+      <div class="stamp-preview filled">☕</div>
+      <div class="stamp-preview filled">☕</div>
+      <div class="stamp-preview filled">☕</div>
+      <div class="stamp-preview">☕</div>
+      <div class="stamp-preview">☕</div>
+      <div class="stamp-preview">☕</div>
+      <div class="stamp-preview">☕</div>
+      <div class="stamp-preview" style="border-color:var(--gold);color:var(--gold)">🎁</div>
+    </div>
+    <a href="loyalty.html" class="btn btn-primary" style="position:relative" data-i18n="loyalty_cta_btn">Check My Card</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section reveal" id="contact">
+  <div class="section-label" data-i18n="contact_label">Find Us</div>
+  <h2 class="section-title" data-i18n="contact_title">Come <span>Visit Us</span></h2>
+  <div class="contact-grid" style="margin-top:2rem">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div>
+          <h4 data-i18n="contact_loc">Location</h4>
+          <p id="locationText">Amman, Jordan</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div>
+          <h4 data-i18n="contact_hours">Hours</h4>
+          <p id="hoursText">Sat – Thu: 10AM – 10PM<br>Fri: Closed</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📱</div>
+        <div>
+          <h4>Instagram</h4>
+          <p><a href="https://instagram.com/riza.tea.co" target="_blank" rel="noopener">@riza.tea.co</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="map-wrap">
+      <iframe
+        src="https://maps.google.com/maps?q=riza+tea&output=embed"
+        allowfullscreen loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">Riza Tea</div>
+  <div class="footer-tagline" data-i18n="footer_tagline">Every cup, a moment worth remembering.</div>
+  <div class="footer-links">
+    <a href="index.html" data-i18n="nav_home">Home</a>
+    <a href="menu.html" data-i18n="nav_menu">Menu</a>
+    <a href="loyalty.html" data-i18n="nav_loyalty">Loyalty Card</a>
+    <a href="#contact" data-i18n="nav_contact">Contact</a>
+  </div>
+  <div class="footer-socials">
+    <a href="https://instagram.com/riza.tea.co" target="_blank" rel="noopener" class="footer-social">📸</a>
+  </div>
+  <div class="footer-copy">© 2025 Riza Tea. All rights reserved.</div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close" id="lightboxClose">×</span>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
