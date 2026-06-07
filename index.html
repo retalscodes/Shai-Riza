@@ -130,9 +130,9 @@
 
       <h3 style="color:var(--gold);margin-top:2rem;margin-bottom:1rem;font-size:1rem" data-i18n="hours_title">Opening Hours</h3>
       <div class="hours-grid" id="hoursGrid">
-        <!-- populated from settings -->
-        <div class="hours-row"><span class="day">Sat – Thu</span><span class="time">10:00 AM – 10:00 PM</span></div>
-        <div class="hours-row closed"><span class="day">Friday</span><span class="time">Closed</span></div>
+        <div class="hours-row" style="grid-column:1/-1">
+          <span class="day" style="color:var(--muted);font-size:.85rem">Hours will be listed here soon</span>
+        </div>
       </div>
     </div>
   </div>
@@ -185,30 +185,32 @@
         <div class="contact-item-icon">📍</div>
         <div>
           <h4 data-i18n="contact_loc">Location</h4>
-          <p id="locationText">Amman, Jordan</p>
+          <p id="locationText">UAE</p>
         </div>
       </div>
       <div class="contact-item">
         <div class="contact-item-icon">🕐</div>
         <div>
           <h4 data-i18n="contact_hours">Hours</h4>
-          <p id="hoursText">Sat – Thu: 10AM – 10PM<br>Fri: Closed</p>
+          <p id="hoursText" style="color:var(--muted)">Coming soon</p>
         </div>
       </div>
       <div class="contact-item">
         <div class="contact-item-icon">📱</div>
         <div>
           <h4>Instagram</h4>
-          <p><a href="https://instagram.com/riza.tea.co" target="_blank" rel="noopener">@riza.tea.co</a></p>
+          <p><a href="https://www.instagram.com/rizateacafe/" target="_blank" rel="noopener">@rizateacafe</a></p>
         </div>
       </div>
     </div>
-    <div class="map-wrap">
-      <iframe
-        src="https://maps.google.com/maps?q=riza+tea&output=embed"
-        allowfullscreen loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
+    <div class="map-wrap" style="display:grid;place-items:center;background:var(--card)">
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:3rem;margin-bottom:1rem">📍</div>
+        <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem">Riza Tea — UAE</p>
+        <a href="https://maps.app.goo.gl/euXR2a4SmNiSoidR7"
+           target="_blank" rel="noopener"
+           class="btn btn-outline btn-sm">Open in Google Maps ↗</a>
+      </div>
     </div>
   </div>
 </section>
@@ -224,7 +226,7 @@
     <a href="#contact" data-i18n="nav_contact">Contact</a>
   </div>
   <div class="footer-socials">
-    <a href="https://instagram.com/riza.tea.co" target="_blank" rel="noopener" class="footer-social">📸</a>
+    <a href="https://www.instagram.com/rizateacafe/" target="_blank" rel="noopener" class="footer-social">📸</a>
   </div>
   <div class="footer-copy">© 2025 Riza Tea. All rights reserved.</div>
 </footer>

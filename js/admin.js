@@ -1,3 +1,60 @@
+// ── ADMIN LANGUAGE ───────────────────────────────────
+const ADMIN_STRINGS = {
+  en: {
+    dashboard: ['Dashboard', 'Good to see you 👋'],
+    menu:      ['Menu Editor', 'Add, edit or remove items'],
+    gallery:   ['Gallery', 'Manage your photos'],
+    special:   ["Today's Special", 'Highlight a featured item'],
+    about:     ['About & Hours', 'Edit your story and opening times'],
+    loyalty:   ['Add a Stamp', 'Log a customer purchase'],
+    customers: ['All Customers', 'Browse loyalty card holders'],
+    sidebarLinks: { dashboard:'Dashboard', menu:'Menu', gallery:'Gallery', special:"Today's Special", about:'About & Hours', loyalty:'Add a Stamp', customers:'All Customers' },
+    viewSite: 'View Website', logout: 'Logout',
+    langBtn: 'عربي',
+  },
+  ar: {
+    dashboard: ['لوحة التحكم', 'أهلاً وسهلاً 👋'],
+    menu:      ['تعديل القائمة', 'أضف أو عدّل أو احذف الأصناف'],
+    gallery:   ['معرض الصور', 'أدر صورك'],
+    special:   ['عرض اليوم', 'أبرز صنفاً مميزاً'],
+    about:     ['من نحن وأوقات العمل', 'عدّل قصتك وأوقات الدوام'],
+    loyalty:   ['أضف طابع', 'سجّل طلب العميل'],
+    customers: ['كل العملاء', 'تصفح حاملي بطاقات الولاء'],
+    sidebarLinks: { dashboard:'لوحة التحكم', menu:'القائمة', gallery:'الصور', special:'عرض اليوم', about:'من نحن', loyalty:'أضف طابع', customers:'العملاء' },
+    viewSite: 'زيارة الموقع', logout: 'تسجيل الخروج',
+    langBtn: 'English',
+  },
+};
+
+let adminLang = localStorage.getItem('rizaAdminLang') || 'en';
+
+function applyAdminLang(lang) {
+  adminLang = lang;
+  localStorage.setItem('rizaAdminLang', lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+  const s = ADMIN_STRINGS[lang];
+  const btn = document.getElementById('adminLangToggle');
+  if (btn) btn.textContent = s.langBtn;
+  // Sidebar links
+  document.querySelectorAll('.sidebar-link[data-page]').forEach(el => {
+    const page = el.dataset.page;
+    const icon = el.querySelector('.icon')?.outerHTML || '';
+    if (s.sidebarLinks[page]) el.innerHTML = `${icon} ${s.sidebarLinks[page]}`;
+  });
+  // Footer links
+  const viewSite = document.querySelector('.sidebar-footer .sidebar-link:not(#logoutBtn)');
+  if (viewSite) viewSite.innerHTML = `<span class="icon">🌐</span> ${s.viewSite}`;
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) logoutBtn.innerHTML = `<span class="icon">🚪</span> ${s.logout}`;
+  // Re-apply current page title
+  const activePage = document.querySelector('.sidebar-link.active')?.dataset?.page;
+  if (activePage && s[activePage]) {
+    document.getElementById('pageTitle').textContent    = s[activePage][0];
+    document.getElementById('pageSubtitle').textContent = s[activePage][1];
+  }
+}
+
 // ── UTILS ───────────────────────────────────────────
 function showToast(msg, type = 'info', duration = 3500) {
   const c = document.getElementById('toastContainer');
@@ -60,15 +117,6 @@ function logout() {
 }
 
 // ── NAVIGATION ───────────────────────────────────────
-const PAGE_TITLES = {
-  dashboard: ['Dashboard', 'Good to see you 👋'],
-  menu:      ['Menu Editor', 'Add, edit or remove items'],
-  gallery:   ['Gallery', 'Manage your photos'],
-  special:   ["Today's Special", 'Highlight a featured item'],
-  about:     ['About & Hours', 'Edit your story and opening times'],
-  loyalty:   ['Add a Stamp', 'Log a customer purchase'],
-  customers: ['All Customers', 'Browse loyalty card holders'],
-};
 
 function showPage(id) {
   document.querySelectorAll('[id^="page-"]').forEach(p => p.style.display = 'none');
@@ -77,7 +125,7 @@ function showPage(id) {
   if (page) page.style.display = 'block';
   const link = document.querySelector(`.sidebar-link[data-page="${id}"]`);
   if (link) link.classList.add('active');
-  const [title, sub] = PAGE_TITLES[id] || [id, ''];
+  const [title, sub] = (ADMIN_STRINGS[adminLang]?.[id]) || [id, ''];
   document.getElementById('pageTitle').textContent = title;
   document.getElementById('pageSubtitle').textContent = sub;
   closeSidebar();
@@ -92,6 +140,7 @@ function closeSidebar() {
 // ── INIT ─────────────────────────────────────────────
 function initAdmin() {
   document.getElementById('topbarDate').textContent = new Date().toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long' });
+  applyAdminLang(adminLang);
   showPage('dashboard');
   buildHoursEditor();
 }
@@ -600,6 +649,11 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCustomers(allCustomers.filter(c =>
       (c.name||'').toLowerCase().includes(q) || c.phone.includes(q)
     ));
+  });
+
+  // Admin language toggle
+  document.getElementById('adminLangToggle')?.addEventListener('click', () => {
+    applyAdminLang(adminLang === 'ar' ? 'en' : 'ar');
   });
 
   // Auto-login if token exists

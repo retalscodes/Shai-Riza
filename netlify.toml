@@ -57,6 +57,16 @@
   to = "/.netlify/functions/upload-image"
   status = 200
 
+[[redirects]]
+  from = "/api/cashier-auth"
+  to = "/.netlify/functions/cashier-auth"
+  status = 200
+
+[[redirects]]
+  from = "/api/cashier-stamp"
+  to = "/.netlify/functions/cashier-stamp"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]

@@ -1,18 +1,28 @@
 const STAMPS_GOAL = 10;
 let currentCustomer = null;
 
-const phoneInput = document.getElementById('phoneInput');
-const lookupBtn = document.getElementById('lookupBtn');
-const lookupBox = document.getElementById('lookupBox');
-const cardWrap = document.getElementById('cardWrap');
-const registerBox = document.getElementById('registerBox');
-const registerBtn = document.getElementById('registerBtn');
-const switchCardBtn = document.getElementById('switchCardBtn');
+const phoneInput   = document.getElementById('phoneInput');
+const lookupBtn    = document.getElementById('lookupBtn');
+const lookupBox    = document.getElementById('lookupBox');
+const cardWrap     = document.getElementById('cardWrap');
+const registerBox  = document.getElementById('registerBox');
+const registerBtn  = document.getElementById('registerBtn');
+const switchCardBtn= document.getElementById('switchCardBtn');
 const freeDrinkBanner = document.getElementById('freeDrinkBanner');
-const stampsGrid = document.getElementById('stampsGrid');
+const stampsGrid   = document.getElementById('stampsGrid');
 
 function formatPhone(raw) {
   return raw.replace(/\s+/g, '').replace(/[^\d+]/g, '');
+}
+
+function generateQR(phone) {
+  const canvas = document.getElementById('qrCanvas');
+  if (!canvas || typeof QRCode === 'undefined') return;
+  QRCode.toCanvas(canvas, `RIZATEA:${phone}`, {
+    width: 180,
+    color: { dark: '#0F0700', light: '#ffffff' },
+    errorCorrectionLevel: 'M',
+  }, err => { if (err) console.warn('QR error', err); });
 }
 
 async function lookupCustomer(phone) {
@@ -21,15 +31,10 @@ async function lookupCustomer(phone) {
   try {
     const res = await fetch(`/api/loyalty-lookup?phone=${encodeURIComponent(phone)}`);
     const data = await res.json();
-    if (res.status === 404) {
-      showRegisterFlow(phone);
-    } else if (res.ok) {
-      showCard(data);
-    } else {
-      showToast(data.error || 'Something went wrong', 'error');
-    }
+    if (res.status === 404) showRegisterFlow(phone);
+    else if (res.ok) showCard(data);
+    else showToast(data.error || 'Something went wrong', 'error');
   } catch (_) {
-    // Offline / no backend — demo mode
     showDemoCard(phone);
   } finally {
     lookupBtn.disabled = false;
@@ -45,7 +50,7 @@ function showRegisterFlow(phone) {
 
 async function registerCustomer() {
   const phone = registerBox.dataset.phone;
-  const name = document.getElementById('regName').value.trim();
+  const name  = document.getElementById('regName').value.trim();
   registerBtn.disabled = true;
   try {
     const res = await fetch('/api/loyalty-register', {
@@ -54,12 +59,8 @@ async function registerCustomer() {
       body: JSON.stringify({ phone, name }),
     });
     const data = await res.json();
-    if (res.ok) {
-      registerBox.classList.remove('show');
-      showCard(data);
-    } else {
-      showToast(data.error || 'Registration failed', 'error');
-    }
+    if (res.ok) { registerBox.classList.remove('show'); showCard(data); }
+    else showToast(data.error || 'Registration failed', 'error');
   } catch (_) {
     registerBox.classList.remove('show');
     showDemoCard(phone, name);
@@ -78,26 +79,24 @@ function showCard(customer) {
   registerBox.classList.remove('show');
   cardWrap.classList.add('visible');
 
-  document.getElementById('cardName').textContent = customer.name || 'Guest';
+  document.getElementById('cardName').textContent  = customer.name || 'Guest';
   document.getElementById('cardPhone').textContent = customer.phone;
 
   const stamps = customer.stamps || 0;
-  const total = customer.total_stamps || stamps;
+  const total  = customer.total_stamps || stamps;
   document.getElementById('stampsCount').textContent = stamps;
-  document.getElementById('stampsGoal').textContent = STAMPS_GOAL;
-  document.getElementById('totalEarned').textContent = `${total} total collected`;
+  document.getElementById('stampsGoal').textContent  = STAMPS_GOAL;
+  document.getElementById('totalEarned').textContent  = `${total} total collected`;
 
   renderStamps(stamps);
+  generateQR(customer.phone);
 
-  if (stamps >= STAMPS_GOAL) {
-    freeDrinkBanner.classList.add('show');
-  }
+  if (stamps >= STAMPS_GOAL) freeDrinkBanner.classList.add('show');
 
-  const historyList = document.getElementById('historyList');
   const history = customer.history || [];
   if (history.length) {
     document.getElementById('historySection').classList.add('show');
-    historyList.innerHTML = history.slice(0, 10).map(h => `
+    document.getElementById('historyList').innerHTML = history.slice(0, 10).map(h => `
       <div class="history-item">
         <span class="htype ${h.action === 'redeem' ? 'redeem' : ''}">${h.action === 'redeem' ? '🎁 Redeemed' : '☕ Stamp'}</span>
         <span class="hdate">${formatDate(h.created_at)}</span>
@@ -105,38 +104,28 @@ function showCard(customer) {
   }
 }
 
-function renderStamps(count, animate = false) {
+function renderStamps(count) {
   stampsGrid.innerHTML = '';
   for (let i = 0; i < STAMPS_GOAL; i++) {
     const dot = document.createElement('div');
-    dot.className = 'stamp';
-    if (i === STAMPS_GOAL - 1) dot.classList.add('reward');
-    if (i < count) {
-      dot.classList.add('filled');
-      if (animate && i === count - 1) dot.classList.add('pop');
-    }
+    dot.className = 'stamp' + (i === STAMPS_GOAL - 1 ? ' reward' : '') + (i < count ? ' filled' : '');
     stampsGrid.appendChild(dot);
   }
 }
 
 function formatDate(iso) {
   if (!iso) return '';
-  try {
-    return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  } catch (_) { return iso; }
+  try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+  catch (_) { return iso; }
 }
 
-// Events
 lookupBtn?.addEventListener('click', () => {
   const phone = formatPhone(phoneInput.value);
   if (phone.length < 7) { showToast('Please enter a valid phone number', 'error'); return; }
   lookupCustomer(phone);
 });
 
-phoneInput?.addEventListener('keydown', e => {
-  if (e.key === 'Enter') lookupBtn.click();
-});
-
+phoneInput?.addEventListener('keydown', e => { if (e.key === 'Enter') lookupBtn.click(); });
 registerBtn?.addEventListener('click', registerCustomer);
 
 switchCardBtn?.addEventListener('click', () => {

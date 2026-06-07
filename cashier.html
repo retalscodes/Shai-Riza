@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cashier | Riza Tea</title>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* LOGIN */
+    .c-login {
+      flex: 1; display: grid; place-items: center; padding: 2rem;
+      background: radial-gradient(ellipse at center, rgba(200,134,10,.07), transparent 65%);
+    }
+    .c-login-box {
+      width: 100%; max-width: 360px;
+      background: var(--surface); border: 1px solid rgba(200,134,10,.2);
+      border-radius: 18px; padding: 2.5rem; text-align: center;
+    }
+    .c-logo { font-size: 2.5rem; margin-bottom: .5rem; }
+    .c-login-box h1 { font-size: 1.2rem; color: var(--cream); margin-bottom: .3rem; }
+    .c-login-box p { color: var(--muted); font-size: .82rem; margin-bottom: 1.8rem; }
+    .c-login-box input {
+      text-align: center; font-size: 1rem; letter-spacing: .05em; margin-bottom: 1rem;
+    }
+
+    /* MAIN */
+    .c-header {
+      background: var(--surface); border-bottom: 1px solid rgba(200,134,10,.12);
+      padding: 1rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .c-header-brand { font-size: 1rem; color: var(--gold); font-weight: 600; }
+    .c-header-sub { font-size: .75rem; color: var(--muted); }
+
+    .c-body { flex: 1; padding: 1.5rem; max-width: 480px; margin: 0 auto; width: 100%; }
+
+    /* SCANNER */
+    .scanner-card {
+      background: var(--card); border: 1px solid rgba(200,134,10,.15);
+      border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .scanner-header {
+      padding: 1rem 1.2rem; border-bottom: 1px solid rgba(200,134,10,.1);
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .9rem; color: var(--cream);
+    }
+    #reader { width: 100% !important; }
+    #reader video { border-radius: 0 !important; }
+
+    .or-divider {
+      text-align: center; position: relative; margin: 1.2rem 0;
+      color: var(--muted); font-size: .82rem;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; position: absolute; top: 50%; height: 1px;
+      width: 40%; background: rgba(200,134,10,.15);
+    }
+    .or-divider::before { left: 0; }
+    .or-divider::after { right: 0; }
+
+    /* CUSTOMER RESULT */
+    .result-card {
+      background: var(--surface); border: 1px solid rgba(200,134,10,.25);
+      border-radius: 14px; padding: 1.5rem;
+      display: none; text-align: center;
+    }
+    .result-card.show { display: block; animation: fadeUp .3s ease both; }
+    .result-name { font-size: 1.3rem; font-weight: 600; color: var(--cream); margin-bottom: .2rem; }
+    .result-phone { font-size: .85rem; color: var(--muted); margin-bottom: 1.2rem; }
+    .result-stamps {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem;
+      margin-bottom: 1.2rem;
+    }
+    .r-stamp {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 2px solid rgba(200,134,10,.3);
+      display: grid; place-items: center; font-size: 1rem;
+      transition: all .25s;
+    }
+    .r-stamp.filled { background: var(--gold); border-color: var(--gold); color: #0F0700; }
+    .r-stamp.new { animation: popIn .4s ease both; }
+    .result-status { font-size: .9rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .result-status strong { color: var(--gold); }
+
+    .free-banner {
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      color: #0F0700; border-radius: 10px; padding: 1rem;
+      font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem;
+      display: none;
+    }
+    .free-banner.show { display: block; }
+
+    .action-btns { display: flex; gap: .8rem; flex-wrap: wrap; }
+    .action-btns .btn { flex: 1; min-width: 140px; justify-content: center; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes popIn  { 0%{transform:scale(0)} 60%{transform:scale(1.3)} 100%{transform:scale(1)} }
+
+    /* LANG toggle */
+    .lang-toggle {
+      padding: .3rem .8rem; border-radius: 20px;
+      border: 1px solid rgba(200,134,10,.3); color: var(--muted);
+      font-size: .78rem; cursor: pointer; transition: all .2s;
+    }
+    .lang-toggle:hover { border-color: var(--gold); color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="c-login" id="cLoginWrap">
+  <div class="c-login-box">
+    <div class="c-logo">☕</div>
+    <h1 id="cLoginTitle">Cashier Login</h1>
+    <p id="cLoginSub">Riza Tea — Stamp Terminal</p>
+    <input type="password" id="cPassword" placeholder="Enter cashier password"/>
+    <button class="btn btn-primary btn-full" id="cLoginBtn">Login</button>
+    <div id="cLoginError" style="color:#e74c3c;font-size:.82rem;margin-top:.8rem;display:none">
+      Incorrect password.
+    </div>
+    <div style="margin-top:1.5rem">
+      <button class="lang-toggle" id="cLangToggle">عربي</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="cMain" style="display:none;flex-direction:column;flex:1">
+  <div class="c-header">
+    <div>
+      <div class="c-header-brand">☕ Riza Tea</div>
+      <div class="c-header-sub" id="cHeaderSub">Stamp Terminal</div>
+    </div>
+    <div style="display:flex;gap:.8rem;align-items:center">
+      <button class="lang-toggle" id="cLangToggleMain">عربي</button>
+      <button class="btn btn-outline btn-sm" id="cLogoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <div class="c-body">
+
+    <!-- SCANNER -->
+    <div class="scanner-card">
+      <div class="scanner-header">📷 <span id="scannerLabel">Scan Customer QR Code</span></div>
+      <div id="reader"></div>
+    </div>
+
+    <div class="or-divider"><span id="orLabel">or enter phone manually</span></div>
+
+    <!-- MANUAL -->
+    <div style="display:flex;gap:.8rem;margin-bottom:1.5rem">
+      <input type="tel" id="manualPhone" placeholder="05xxxxxxxx" style="flex:1"/>
+      <button class="btn btn-outline" id="manualFindBtn" style="white-space:nowrap">Find →</button>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-card" id="resultCard">
+      <div class="result-name" id="rName"></div>
+      <div class="result-phone" id="rPhone"></div>
+      <div class="result-stamps" id="rStamps"></div>
+      <div class="result-status" id="rStatus"></div>
+      <div class="free-banner" id="rFreeBanner">🎉 <span id="rFreeMsg">Free drink ready to redeem!</span></div>
+      <div class="action-btns">
+        <button class="btn btn-success" id="rStampBtn">☕ <span id="rStampLabel">Add Stamp</span></button>
+        <button class="btn btn-danger" id="rRedeemBtn" style="display:none">🎁 <span id="rRedeemLabel">Redeem</span></button>
+        <button class="btn btn-outline" id="rClearBtn"><span id="rClearLabel">Clear</span></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ── STRINGS ───────────────────────────────────────────
+const S = {
+  en: {
+    loginTitle: 'Cashier Login', loginSub: 'Riza Tea — Stamp Terminal',
+    headerSub: 'Stamp Terminal',
+    scannerLabel: 'Scan Customer QR Code', orLabel: 'or enter phone manually',
+    stampLabel: 'Add Stamp', redeemLabel: 'Redeem Free Drink', clearLabel: 'Clear',
+    freeMsg: 'Free drink ready to redeem!',
+    status: (s, g) => `${s} / ${g} stamps`,
+    toastStamp: 'Stamp added! ☕', toastRedeem: 'Free drink redeemed! 🎁',
+    toastError: 'Could not connect to server',
+    notFound: 'No card found for this number.',
+    logout: 'Logout',
+  },
+  ar: {
+    loginTitle: 'دخول الكاشير', loginSub: 'شاي ريزا — محطة الطوابع',
+    headerSub: 'محطة الطوابع',
+    scannerLabel: 'امسح رمز QR الخاص بالعميل', orLabel: 'أو أدخل الرقم يدوياً',
+    stampLabel: 'أضف طابع', redeemLabel: 'استبدل المشروب المجاني', clearLabel: 'مسح',
+    freeMsg: '!مشروب مجاني جاهز للاستبدال',
+    status: (s, g) => `${s} / ${g} طوابع`,
+    toastStamp: '!تم إضافة الطابع ☕', toastRedeem: '!تم استبدال المشروب المجاني 🎁',
+    toastError: 'تعذّر الاتصال بالخادم',
+    notFound: 'لم يتم العثور على بطاقة لهذا الرقم.',
+    logout: 'تسجيل الخروج',
+  },
+};
+let lang = localStorage.getItem('rizaCashierLang') || 'en';
+let authToken = sessionStorage.getItem('rizaCashierToken') || '';
+let currentCustomer = null;
+const GOAL = 10;
+
+function t(key, ...args) {
+  const val = S[lang][key];
+  return typeof val === 'function' ? val(...args) : val;
+}
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  const isAr = lang === 'ar';
+  const toggleLabel = isAr ? 'English' : 'عربي';
+
+  document.getElementById('cLoginTitle').textContent   = t('loginTitle');
+  document.getElementById('cLoginSub').textContent     = t('loginSub');
+  document.getElementById('cHeaderSub').textContent    = t('headerSub');
+  document.getElementById('scannerLabel').textContent  = t('scannerLabel');
+  document.getElementById('orLabel').textContent       = t('orLabel');
+  document.getElementById('rStampLabel').textContent   = t('stampLabel');
+  document.getElementById('rRedeemLabel').textContent  = t('redeemLabel');
+  document.getElementById('rClearLabel').textContent   = t('clearLabel');
+  document.getElementById('rFreeMsg').textContent      = t('freeMsg');
+  document.getElementById('cLangToggle').textContent   = toggleLabel;
+  document.getElementById('cLangToggleMain').textContent = toggleLabel;
+  document.getElementById('cLogoutBtn').textContent    = t('logout');
+  if (currentCustomer) renderResult(currentCustomer, false);
+}
+
+function toggleLang() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  localStorage.setItem('rizaCashierLang', lang);
+  applyLang();
+}
+
+// ── AUTH ─────────────────────────────────────────────
+async function cashierLogin() {
+  const pw = document.getElementById('cPassword').value;
+  if (!pw) return;
+  try {
+    const res = await fetch('/api/cashier-auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw }),
+    });
+    const data = await res.json();
+    if (res.ok && data.token) {
+      authToken = data.token;
+      sessionStorage.setItem('rizaCashierToken', authToken);
+      enterCashier();
+    } else {
+      document.getElementById('cLoginError').style.display = 'block';
+    }
+  } catch {
+    authToken = 'dev';
+    sessionStorage.setItem('rizaCashierToken', 'dev');
+    enterCashier();
+  }
+}
+
+function enterCashier() {
+  document.getElementById('cLoginWrap').style.display = 'none';
+  const main = document.getElementById('cMain');
+  main.style.display = 'flex';
+  applyLang();
+  startScanner();
+}
+
+function cashierLogout() {
+  authToken = '';
+  sessionStorage.removeItem('rizaCashierToken');
+  stopScanner();
+  document.getElementById('cMain').style.display = 'none';
+  document.getElementById('cLoginWrap').style.display = 'grid';
+  document.getElementById('cPassword').value = '';
+}
+
+// ── SCANNER ───────────────────────────────────────────
+let scanner = null;
+
+function startScanner() {
+  scanner = new Html5Qrcode('reader');
+  scanner.start(
+    { facingMode: 'environment' },
+    { fps: 10, qrbox: { width: 220, height: 220 } },
+    onQRScanned,
+    () => {}
+  ).catch(err => console.warn('Camera error:', err));
+}
+
+function stopScanner() {
+  scanner?.stop().catch(() => {});
+}
+
+function onQRScanned(text) {
+  // QR format: RIZATEA:PHONE
+  const phone = text.startsWith('RIZATEA:') ? text.replace('RIZATEA:', '') : text;
+  lookupCustomer(phone);
+}
+
+// ── LOOKUP & STAMP ────────────────────────────────────
+async function lookupCustomer(phone) {
+  phone = phone.replace(/\s/g, '');
+  try {
+    const res = await fetch(`/api/loyalty-lookup?phone=${encodeURIComponent(phone)}`);
+    const data = await res.json();
+    if (res.status === 404) { showToast(t('notFound'), 'error'); return; }
+    if (res.ok) renderResult(data, true);
+    else showToast(data.error || t('toastError'), 'error');
+  } catch { showToast(t('toastError'), 'error'); }
+}
+
+function renderResult(customer, scrollTo = false) {
+  currentCustomer = customer;
+  const stamps = customer.stamps || 0;
+  document.getElementById('rName').textContent  = customer.name || 'Guest';
+  document.getElementById('rPhone').textContent = customer.phone;
+  document.getElementById('rStatus').innerHTML  = `<strong>${stamps}</strong> / ${GOAL} ${lang === 'ar' ? 'طوابع' : 'stamps'}`;
+
+  const dotsEl = document.getElementById('rStamps');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < GOAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'r-stamp' + (i < stamps ? ' filled' : '') + (i === GOAL - 1 ? ' reward' : '');
+    d.textContent = i === GOAL - 1 ? '🎁' : (i < stamps ? '☕' : '');
+    dotsEl.appendChild(d);
+  }
+
+  const freeReady = stamps >= GOAL;
+  document.getElementById('rFreeBanner').className = 'free-banner' + (freeReady ? ' show' : '');
+  document.getElementById('rRedeemBtn').style.display = freeReady ? 'inline-flex' : 'none';
+
+  document.getElementById('resultCard').className = 'result-card show';
+  if (scrollTo) document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function addStamp() {
+  if (!currentCustomer) return;
+  const btn = document.getElementById('rStampBtn');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/cashier-stamp', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: currentCustomer.phone, action: 'stamp' }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      renderResult(data, false);
+      // Animate new stamp
+      const dots = document.querySelectorAll('.r-stamp.filled');
+      if (dots.length) dots[dots.length - 1].classList.add('new');
+      showToast(t('toastStamp'), 'success');
+    } else showToast(data.error || t('toastError'), 'error');
+  } catch { showToast(t('toastError'), 'error'); }
+  finally { btn.disabled = false; }
+}
+
+async function redeemDrink() {
+  if (!currentCustomer) return;
+  if (!confirm(lang === 'ar' ? 'تأكيد استبدال المشروب المجاني؟' : 'Confirm redeem free drink?')) return;
+  try {
+    const res = await fetch('/api/cashier-stamp', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: currentCustomer.phone, action: 'redeem' }),
+    });
+    const data = await res.json();
+    if (res.ok) { renderResult(data, false); showToast(t('toastRedeem'), 'success'); }
+    else showToast(data.error || t('toastError'), 'error');
+  } catch { showToast(t('toastError'), 'error'); }
+}
+
+// ── TOAST ─────────────────────────────────────────────
+function showToast(msg, type = 'info', duration = 3500) {
+  const c = document.getElementById('toastContainer');
+  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+  c.appendChild(el);
+  setTimeout(() => el.remove(), duration);
+}
+
+// ── EVENTS ────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  applyLang();
+
+  document.getElementById('cLoginBtn').addEventListener('click', cashierLogin);
+  document.getElementById('cPassword').addEventListener('keydown', e => { if (e.key === 'Enter') cashierLogin(); });
+  document.getElementById('cLangToggle').addEventListener('click', toggleLang);
+  document.getElementById('cLangToggleMain').addEventListener('click', toggleLang);
+  document.getElementById('cLogoutBtn').addEventListener('click', cashierLogout);
+
+  document.getElementById('manualFindBtn').addEventListener('click', () => {
+    const phone = document.getElementById('manualPhone').value.trim();
+    if (phone) lookupCustomer(phone);
+  });
+  document.getElementById('manualPhone').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('manualFindBtn').click();
+  });
+
+  document.getElementById('rStampBtn').addEventListener('click', addStamp);
+  document.getElementById('rRedeemBtn').addEventListener('click', redeemDrink);
+  document.getElementById('rClearBtn').addEventListener('click', () => {
+    currentCustomer = null;
+    document.getElementById('resultCard').className = 'result-card';
+    document.getElementById('manualPhone').value = '';
+  });
+
+  if (authToken) enterCashier();
+});
+</script>
+</body>
+</html>
