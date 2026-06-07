@@ -5,210 +5,200 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Loyalty Card | Riza Tea</title>
   <link rel="stylesheet" href="css/style.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+  <!-- qrcodejs — more reliable than qrcode on mobile -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <style>
-    body { background: linear-gradient(160deg, #FEDF00 0%, #FFF9C4 50%, #FFFDE7 100%); min-height: 100vh; }
+    body { background: linear-gradient(160deg,#FEDF00 0%,#FFF9C4 55%,#FFFDE7 100%); min-height:100vh; }
 
     .loyalty-page {
-      min-height: 100vh;
-      padding: 90px 1rem 4rem;
-      display: flex; flex-direction: column; align-items: center; gap: 1.4rem;
+      min-height:100vh;
+      padding:90px 1rem 5rem;
+      display:flex; flex-direction:column; align-items:center; gap:1.4rem;
     }
 
-    /* ── LOOKUP BOX ── */
+    /* ── LOOKUP ─────────────────────────── */
     .lookup-box {
-      width: 100%; max-width: 400px;
-      background: #fff;
-      border: 2px solid rgba(26,6,0,.1);
-      border-radius: 20px; padding: 2.2rem;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(26,6,0,.1);
+      width:100%; max-width:400px;
+      background:#fff; border:2px solid rgba(26,6,0,.1);
+      border-radius:22px; padding:2.2rem;
+      text-align:center; box-shadow:0 8px 32px rgba(26,6,0,.1);
     }
-    .lookup-icon { font-size: 3.5rem; margin-bottom: .8rem; line-height: 1; }
-    .lookup-box h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; color: #1A0600; margin-bottom: .4rem;
-    }
-    .lookup-box p { color: #6B5500; font-size: .88rem; margin-bottom: 1.6rem; line-height: 1.6; }
+    .lookup-icon { font-size:3.5rem; margin-bottom:.8rem; }
+    .lookup-box h2 { font-family:'Playfair Display',serif; font-size:1.5rem; color:#1A0600; margin-bottom:.4rem; }
+    .lookup-box p  { color:#6B5500; font-size:.88rem; margin-bottom:1.6rem; line-height:1.6; }
 
-    .phone-input-wrap { position: relative; margin-bottom: 1rem; }
-    .phone-input-wrap .flag { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
+    .phone-row { display:flex; gap:.7rem; margin-bottom:1rem; }
     .lookup-input {
-      width: 100%; padding: .9rem 1rem .9rem 3rem;
-      border: 2px solid rgba(26,6,0,.15);
-      border-radius: 12px; color: #1A0600; font-size: 1.05rem;
-      text-align: center; letter-spacing: .08em;
-      outline: none; transition: border-color .25s;
-      background: #FFFDF0;
+      flex:1; padding:.9rem 1rem;
+      border:2px solid rgba(26,6,0,.12); border-radius:12px;
+      color:#1A0600; font-size:1.05rem; text-align:center;
+      outline:none; transition:border-color .25s; background:#FFFDF0;
+      letter-spacing:.06em;
     }
-    .lookup-input:focus { border-color: #FEDF00; box-shadow: 0 0 0 3px rgba(254,223,0,.2); }
-    .lookup-input::placeholder { color: #BBA840; letter-spacing: 0; }
+    .lookup-input:focus { border-color:#FEDF00; box-shadow:0 0 0 3px rgba(254,223,0,.25); }
+    .lookup-input::placeholder { color:#BBA840; letter-spacing:0; }
 
     .lookup-btn {
-      width: 100%; padding: .95rem;
-      background: #1A0600; color: #FEDF00;
-      border-radius: 12px; font-size: 1rem; font-weight: 700;
-      border: none; cursor: pointer;
-      transition: all .2s; letter-spacing: .04em;
+      width:100%; padding:.95rem;
+      background:#1A0600; color:#FEDF00;
+      border-radius:12px; font-size:1rem; font-weight:700;
+      border:none; cursor:pointer; transition:all .2s; letter-spacing:.03em;
     }
-    .lookup-btn:hover { background: #2d1000; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,6,0,.2); }
-    .lookup-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .lookup-btn:hover { background:#2d1000; transform:translateY(-1px); box-shadow:0 6px 20px rgba(26,6,0,.2); }
+    .lookup-btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
+    .new-hint { margin-top:.9rem; font-size:.78rem; color:#BBA840; }
 
-    .new-hint { margin-top: .9rem; font-size: .78rem; color: #BBA840; }
-
-    /* ── ERROR ── */
+    /* ── ERROR ──────────────────────────── */
     .error-box {
-      display: none; width: 100%; max-width: 400px;
-      background: #fff3f3; border: 2px solid #e74c3c;
-      border-radius: 12px; padding: 1rem 1.5rem;
-      text-align: center; color: #c0392b; font-size: .88rem;
+      display:none; width:100%; max-width:420px;
+      background:#fff3f3; border:2px solid #e74c3c;
+      border-radius:12px; padding:.9rem 1.4rem;
+      text-align:center; color:#c0392b; font-size:.88rem;
     }
-    .error-box.show { display: block; animation: fadeUp .3s ease both; }
+    .error-box.show { display:block; animation:fadeUp .3s ease both; }
 
-    /* ── LOYALTY CARD ── */
-    .card-wrap { width: 100%; max-width: 420px; display: none; flex-direction: column; align-items: center; gap: 1.2rem; }
-    .card-wrap.show { display: flex; animation: fadeUp .45s ease both; }
-
-    .loyalty-card {
-      width: 100%;
-      background: linear-gradient(135deg, #1A0600 0%, #2d1200 60%, #3d1a00 100%);
-      border-radius: 22px; padding: 1.8rem;
-      position: relative; overflow: hidden;
-      box-shadow: 0 16px 48px rgba(26,6,0,.35);
-    }
-    .loyalty-card::before {
-      content: ''; position: absolute; top: -50px; right: -50px;
-      width: 180px; height: 180px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(254,223,0,.12), transparent 70%);
-    }
-    .loyalty-card::after {
-      content: ''; position: absolute; bottom: -40px; left: -40px;
-      width: 140px; height: 140px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(254,223,0,.08), transparent 70%);
-    }
-
-    .card-header {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 1.4rem; position: relative; z-index: 1;
-    }
-    .card-brand { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #FEDF00; }
-    .card-brand-ar { font-size: .78rem; color: rgba(254,223,0,.6); margin-top: .1rem; }
-    .card-logo-mark {
-      width: 42px; height: 42px; border-radius: 50%;
-      border: 1.5px solid rgba(254,223,0,.4);
-      display: grid; place-items: center; font-size: 1.3rem;
-    }
-    .card-name { font-size: 1.05rem; font-weight: 700; color: #fff; position: relative; z-index: 1; margin-bottom: .2rem; }
-    .card-phone { font-size: .8rem; color: rgba(255,255,255,.5); margin-bottom: 1.4rem; position: relative; z-index: 1; }
-
-    .stamps-grid {
-      display: grid; grid-template-columns: repeat(5, 1fr);
-      gap: .6rem; margin-bottom: 1.4rem; position: relative; z-index: 1;
-    }
-    .stamp {
-      aspect-ratio: 1; border-radius: 50%;
-      border: 2px solid rgba(254,223,0,.25);
-      display: grid; place-items: center;
-      font-size: 1rem; transition: all .3s;
-      background: rgba(255,255,255,.05);
-    }
-    .stamp::after { content: ''; }
-    .stamp.filled { background: #FEDF00; border-color: #FEDF00; box-shadow: 0 0 14px rgba(254,223,0,.5); }
-    .stamp.filled::after { content: '☕'; }
-    .stamp.reward { border-color: rgba(254,223,0,.5); background: rgba(254,223,0,.08); }
-    .stamp.reward::after { content: '🎁'; font-size: .9rem; }
-    .stamp.reward.filled { background: linear-gradient(135deg, #FEDF00, #FFB800); animation: glowPulse 1.5s ease infinite; }
-    .stamp.pop { animation: popIn .4s cubic-bezier(.36,.07,.19,.97) both; }
-
-    .card-footer {
-      display: flex; justify-content: space-between; align-items: center;
-      padding-top: 1rem; border-top: 1px solid rgba(254,223,0,.12);
-      position: relative; z-index: 1;
-    }
-    .card-progress { font-size: .8rem; color: rgba(255,255,255,.5); }
-    .card-progress strong { color: #FEDF00; font-size: 1rem; }
-    .card-total { font-size: .75rem; color: rgba(254,223,0,.4); }
-
-    /* ── FREE DRINK ── */
-    .free-drink-banner {
-      display: none; width: 100%; max-width: 420px;
-      background: linear-gradient(135deg, #FEDF00, #FFB800);
-      color: #1A0600; border-radius: 14px; padding: 1.3rem 1.5rem;
-      text-align: center; font-weight: 700;
-      box-shadow: 0 8px 24px rgba(254,223,0,.4);
-    }
-    .free-drink-banner.show { display: block; animation: fadeUp .5s ease both; }
-    .free-drink-banner .big { font-size: 1.6rem; margin-bottom: .3rem; }
-
-    /* ── QR SECTION ── */
-    .qr-section {
-      width: 100%; max-width: 420px;
-      background: #fff; border: 2px solid rgba(26,6,0,.08);
-      border-radius: 16px; padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 4px 16px rgba(26,6,0,.07);
-    }
-    .qr-label { font-size: .75rem; color: #6B5500; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem; }
-    #qrCanvas { border-radius: 12px; display: inline-block; }
-    .qr-hint { font-size: .82rem; color: #BBA840; margin-top: .8rem; line-height: 1.5; }
-    .wallet-btns { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
-    .wallet-btn {
-      display: flex; align-items: center; gap: .4rem;
-      padding: .5rem 1rem; border-radius: 8px;
-      border: 1.5px solid rgba(26,6,0,.12); color: #BBA840;
-      font-size: .78rem; opacity: .7;
-    }
-
-    /* ── HISTORY ── */
-    .history-section { width: 100%; max-width: 420px; }
-    .history-title { font-size: .75rem; color: #6B5500; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; margin-bottom: .7rem; }
-    .history-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: .65rem .9rem; border-radius: 10px;
-      background: #fff; border: 1px solid rgba(26,6,0,.07);
-      margin-bottom: .4rem; font-size: .82rem;
-      box-shadow: 0 1px 4px rgba(26,6,0,.05);
-    }
-    .htype { color: #1A0600; font-weight: 600; }
-    .htype.redeem { color: #FF8F00; }
-    .hdate { color: #BBA840; font-size: .78rem; }
-
-    /* ── REGISTER BOX ── */
+    /* ── REGISTER ───────────────────────── */
     .register-box {
-      display: none; width: 100%; max-width: 400px;
-      background: #fff; border: 2px solid rgba(26,6,0,.1);
-      border-radius: 20px; padding: 2rem; text-align: center;
-      box-shadow: 0 8px 32px rgba(26,6,0,.1);
+      display:none; width:100%; max-width:400px;
+      background:#fff; border:2px solid rgba(26,6,0,.1);
+      border-radius:22px; padding:2rem; text-align:center;
+      box-shadow:0 8px 32px rgba(26,6,0,.1);
     }
-    .register-box.show { display: block; animation: fadeUp .4s ease both; }
-    .register-box h3 { font-family: 'Playfair Display', serif; color: #1A0600; margin-bottom: .4rem; font-size: 1.4rem; }
-    .register-box p { color: #6B5500; font-size: .87rem; margin-bottom: 1.5rem; }
+    .register-box.show { display:block; animation:fadeUp .4s ease both; }
+    .register-box h3 { font-family:'Playfair Display',serif; color:#1A0600; margin-bottom:.4rem; font-size:1.4rem; }
+    .register-box p   { color:#6B5500; font-size:.87rem; margin-bottom:1.2rem; }
+    .reg-phone-label  { background:#FFFDF0; border:1.5px solid rgba(26,6,0,.1); border-radius:8px; padding:.5rem 1rem; color:#6B5500; font-size:.88rem; margin-bottom:1rem; }
     .reg-input {
-      width: 100%; padding: .85rem 1rem; text-align: center;
-      border: 2px solid rgba(26,6,0,.12); border-radius: 12px;
-      color: #1A0600; font-size: 1rem;
-      outline: none; margin-bottom: 1rem; transition: border-color .25s;
-      background: #FFFDF0;
+      width:100%; padding:.85rem 1rem; text-align:center;
+      border:2px solid rgba(26,6,0,.12); border-radius:12px;
+      color:#1A0600; font-size:1rem; outline:none; margin-bottom:1rem;
+      transition:border-color .25s; background:#FFFDF0;
     }
-    .reg-input:focus { border-color: #FEDF00; }
-    .reg-phone-display {
-      background: #FFFDF0; border: 1.5px solid rgba(26,6,0,.1);
-      border-radius: 8px; padding: .5rem 1rem;
-      color: #6B5500; font-size: .88rem; margin-bottom: 1rem;
+    .reg-input:focus { border-color:#FEDF00; }
+
+    /* ── CARD WRAP ──────────────────────── */
+    .card-wrap { display:none; width:100%; max-width:420px; flex-direction:column; align-items:center; gap:1.2rem; }
+    .card-wrap.show { display:flex; animation:fadeUp .45s ease both; }
+
+    /* ── LOYALTY CARD (the beautiful one) ─ */
+    .loyalty-card {
+      width:100%; background:#FFFBF0;
+      border-radius:24px; overflow:hidden;
+      box-shadow:0 20px 60px rgba(26,6,0,.18);
+      border:2px solid rgba(26,6,0,.08);
+      font-family:'Inter',sans-serif;
     }
+
+    .lc-header {
+      background:#1A0600;
+      padding:1.2rem 1.5rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .lc-brand { color:#FEDF00; font-family:'Playfair Display',serif; font-size:1.15rem; letter-spacing:.05em; }
+    .lc-brand-ar { color:rgba(254,223,0,.6); font-size:.72rem; margin-top:.1rem; }
+    .lc-stamp-count { text-align:right; }
+    .lc-stamp-count .label { font-size:.65rem; color:rgba(254,223,0,.6); letter-spacing:.12em; text-transform:uppercase; }
+    .lc-stamp-count .count { font-size:1.5rem; font-weight:800; color:#FEDF00; line-height:1; }
+
+    .lc-body { padding:1.4rem 1.5rem; }
+
+    /* stamp grid — 2 rows of 5 */
+    .stamps-grid {
+      display:grid; grid-template-columns:repeat(5,1fr);
+      gap:.65rem; margin-bottom:1.4rem;
+    }
+    .stamp-cup {
+      aspect-ratio:1; border-radius:50%;
+      display:grid; place-items:center;
+      font-size:1.6rem; transition:all .35s;
+      background:rgba(26,6,0,.06);
+      border:2px solid rgba(26,6,0,.1);
+      position:relative;
+    }
+    .stamp-cup::after { content:'·'; font-size:1.2rem; color:rgba(26,6,0,.2); }
+    .stamp-cup.filled { background:#FEDF00; border-color:#FEDF00; box-shadow:0 4px 14px rgba(254,223,0,.6); }
+    .stamp-cup.filled::after { content:'☕'; }
+    .stamp-cup.reward { border-color:#FF8F00; background:rgba(255,143,0,.08); }
+    .stamp-cup.reward::after { content:'🎁'; font-size:1.3rem; }
+    .stamp-cup.reward.filled { background:linear-gradient(135deg,#FEDF00,#FF8F00); border-color:#FF8F00; box-shadow:0 4px 18px rgba(255,143,0,.6); animation:glowPulse 1.5s ease infinite; }
+    .stamp-cup.reward.filled::after { content:'🎁'; }
+    .stamp-cup.pop { animation:popIn .4s cubic-bezier(.36,.07,.19,.97) both; }
+
+    .lc-customer { display:flex; justify-content:space-between; align-items:flex-end; }
+    .lc-customer-label { font-size:.62rem; color:#BBA840; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.2rem; }
+    .lc-customer-name  { font-size:1rem; font-weight:700; color:#1A0600; }
+    .lc-customer-phone { font-size:.78rem; color:#BBA840; }
+    .lc-progress { text-align:right; }
+    .lc-progress-text { font-size:.75rem; color:#BBA840; }
+    .lc-free-count { font-size:.8rem; color:#FF8F00; font-weight:600; margin-top:.1rem; }
+
+    /* ── FREE DRINK BANNER ──────────────── */
+    .free-banner {
+      display:none; width:100%; max-width:420px;
+      background:linear-gradient(135deg,#FEDF00,#FFB800);
+      color:#1A0600; border-radius:16px; padding:1.3rem 1.5rem;
+      text-align:center; font-weight:700;
+      box-shadow:0 8px 24px rgba(254,223,0,.5);
+    }
+    .free-banner.show { display:block; animation:fadeUp .5s ease both; }
+    .free-banner .big { font-size:1.8rem; margin-bottom:.3rem; }
+    .free-banner p { font-size:.9rem; opacity:.85; font-weight:500; }
+
+    /* ── QR SECTION ─────────────────────── */
+    .qr-section {
+      width:100%; max-width:420px;
+      background:#fff; border:2px solid rgba(26,6,0,.07);
+      border-radius:20px; padding:1.5rem;
+      text-align:center; box-shadow:0 4px 16px rgba(26,6,0,.07);
+    }
+    .qr-label { font-size:.72rem; color:#6B5500; letter-spacing:.12em; text-transform:uppercase; font-weight:700; margin-bottom:1.1rem; }
+    #qrcode { display:inline-block; }
+    #qrcode img, #qrcode canvas { border-radius:10px !important; }
+    .qr-sub { font-size:.8rem; color:#BBA840; margin-top:.9rem; line-height:1.5; }
+
+    .save-btn {
+      display:flex; align-items:center; justify-content:center; gap:.5rem;
+      width:100%; margin-top:1rem; padding:.8rem;
+      background:#1A0600; color:#FEDF00;
+      border-radius:10px; font-size:.88rem; font-weight:700;
+      border:none; cursor:pointer; transition:all .2s;
+    }
+    .save-btn:hover { background:#2d1000; }
+
+    /* ── HISTORY ─────────────────────────── */
+    .history-section { width:100%; max-width:420px; }
+    .history-title { font-size:.7rem; color:#6B5500; letter-spacing:.12em; text-transform:uppercase; font-weight:700; margin-bottom:.7rem; }
+    .history-item {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:.65rem .9rem; border-radius:10px;
+      background:#fff; border:1px solid rgba(26,6,0,.07);
+      margin-bottom:.4rem; font-size:.82rem;
+    }
+    .htype { color:#1A0600; font-weight:600; }
+    .htype.redeem { color:#FF8F00; }
+    .hdate { color:#BBA840; font-size:.76rem; }
 
     .switch-btn {
-      background: none; border: 2px solid rgba(26,6,0,.15);
-      border-radius: 10px; color: #6B5500; font-size: .83rem;
-      padding: .6rem 1.4rem; cursor: pointer; transition: all .2s;
-      font-weight: 500;
+      background:none; border:2px solid rgba(26,6,0,.15);
+      border-radius:10px; color:#6B5500; font-size:.83rem;
+      padding:.6rem 1.4rem; cursor:pointer; transition:all .2s; font-weight:500;
     }
-    .switch-btn:hover { border-color: #1A0600; color: #1A0600; }
+    .switch-btn:hover { border-color:#1A0600; color:#1A0600; }
 
-    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes popIn { 0%{transform:scale(0)} 60%{transform:scale(1.25)} 100%{transform:scale(1)} }
-    @keyframes glowPulse { 0%,100%{box-shadow:0 0 12px rgba(254,223,0,.5)} 50%{box-shadow:0 0 28px rgba(254,223,0,1)} }
-    @keyframes spin { to{transform:rotate(360deg)} }
+    /* ── WALLET HINT ─────────────────────── */
+    .wallet-hint {
+      width:100%; max-width:420px;
+      background:rgba(255,255,255,.7); border:1.5px solid rgba(26,6,0,.08);
+      border-radius:14px; padding:1rem 1.2rem;
+      display:flex; align-items:center; gap:.9rem; font-size:.82rem; color:#6B5500;
+    }
+    .wallet-hint .wicon { font-size:1.8rem; flex-shrink:0; }
+
+    @keyframes fadeUp    { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes popIn     { 0%{transform:scale(0)} 60%{transform:scale(1.3)} 100%{transform:scale(1)} }
+    @keyframes glowPulse { 0%,100%{box-shadow:0 4px 14px rgba(255,143,0,.5)} 50%{box-shadow:0 4px 28px rgba(255,143,0,1)} }
+    @keyframes spin      { to{transform:rotate(360deg)} }
     .spinner { display:inline-block; animation:spin .7s linear infinite; }
   </style>
 </head>
@@ -235,15 +225,11 @@
 
   <!-- LOOKUP -->
   <div class="lookup-box" id="lookupBox">
-    <div class="lookup-icon">🎁</div>
+    <div class="lookup-icon">☕</div>
     <h2 data-i18n="loyalty_title">Your Loyalty Card</h2>
     <p data-i18n="loyalty_sub">Enter your phone number to check your stamps and rewards.</p>
-    <div class="phone-input-wrap">
-      <span class="flag">📱</span>
-      <input type="tel" class="lookup-input" id="phoneInput"
-        placeholder="05xxxxxxxx" maxlength="15" autocomplete="tel"
-        inputmode="tel"/>
-    </div>
+    <input type="tel" class="lookup-input" id="phoneInput"
+      placeholder="05xxxxxxxx" maxlength="15" autocomplete="tel" inputmode="tel"/>
     <button class="lookup-btn" id="lookupBtn">Find My Card</button>
     <p class="new-hint" data-i18n="loyalty_new_hint">First time? We'll set up your card automatically.</p>
   </div>
@@ -251,44 +237,54 @@
   <!-- ERROR -->
   <div class="error-box" id="errorBox"></div>
 
-  <!-- FREE DRINK BANNER -->
-  <div class="free-drink-banner" id="freeDrinkBanner">
+  <!-- FREE DRINK -->
+  <div class="free-banner" id="freeBanner">
     <div class="big">🎉 Free Drink Ready!</div>
-    <div data-i18n="loyalty_free_msg">Show this to the cashier to claim your free drink.</div>
+    <p data-i18n="loyalty_free_msg">Show this to the cashier to claim your free drink.</p>
   </div>
 
-  <!-- CARD + QR + HISTORY -->
+  <!-- CARD -->
   <div class="card-wrap" id="cardWrap">
 
-    <div class="loyalty-card">
-      <div class="card-header">
+    <div class="loyalty-card" id="loyaltyCard">
+      <div class="lc-header">
         <div>
-          <div class="card-brand">Riza Tea</div>
-          <div class="card-brand-ar">شاي ريزا</div>
+          <div class="lc-brand">Riza Tea</div>
+          <div class="lc-brand-ar">شاي ريزا</div>
         </div>
-        <div class="card-logo-mark">☕</div>
+        <div class="lc-stamp-count">
+          <div class="label">Stamps</div>
+          <div class="count"><span id="stampsNow">0</span>/10</div>
+        </div>
       </div>
-      <div class="card-name" id="cardName">—</div>
-      <div class="card-phone" id="cardPhone">—</div>
-      <div class="stamps-grid" id="stampsGrid"></div>
-      <div class="card-footer">
-        <div class="card-progress">
-          <strong id="stampsCount">0</strong> / 10
-          <span data-i18n="loyalty_stamps_label"> stamps</span>
+      <div class="lc-body">
+        <div class="stamps-grid" id="stampsGrid"></div>
+        <div class="lc-customer">
+          <div>
+            <div class="lc-customer-label">Name</div>
+            <div class="lc-customer-name"  id="cardName">—</div>
+            <div class="lc-customer-phone" id="cardPhone">—</div>
+          </div>
+          <div class="lc-progress">
+            <div class="lc-progress-text" id="totalText"></div>
+            <div class="lc-free-count"    id="freeCount"></div>
+          </div>
         </div>
-        <div class="card-total" id="totalEarned"></div>
       </div>
     </div>
 
-    <!-- QR CODE -->
+    <!-- QR -->
     <div class="qr-section">
       <div class="qr-label" data-i18n="loyalty_qr_hint">Show this QR to the cashier to add your stamp</div>
-      <canvas id="qrCanvas"></canvas>
-      <p class="qr-hint" id="qrHint">📱 Let the cashier scan this</p>
-      <div class="wallet-btns">
-        <div class="wallet-btn">🍎 Apple Wallet <span style="margin-left:.3rem;font-size:.7rem">(soon)</span></div>
-        <div class="wallet-btn">🤖 Google Wallet <span style="margin-left:.3rem;font-size:.7rem">(soon)</span></div>
-      </div>
+      <div id="qrcode"></div>
+      <p class="qr-sub">📱 Let the cashier scan this to add your stamp</p>
+      <button class="save-btn" id="saveCardBtn">📥 Save Card to Photos</button>
+    </div>
+
+    <!-- WALLET HINT -->
+    <div class="wallet-hint">
+      <span class="wicon">💡</span>
+      <span>Tap <strong>Save Card to Photos</strong> above, then add that photo to your Apple/Google Wallet as a pass image — or just screenshot the card!</span>
     </div>
 
     <!-- HISTORY -->
@@ -304,17 +300,17 @@
   <div class="register-box" id="registerBox">
     <h3 data-i18n="loyalty_register_title">Welcome to Riza! 👋</h3>
     <p data-i18n="loyalty_register_sub">First visit? Add your name to personalise your card.</p>
-    <div class="reg-phone-display" id="regPhoneDisplay"></div>
+    <div class="reg-phone-label" id="regPhoneDisplay"></div>
     <input type="text" class="reg-input" id="regName" placeholder="Your name (optional)" autocomplete="name"/>
     <button class="lookup-btn" id="registerBtn" data-i18n="loyalty_register_btn">Create My Card</button>
-    <button class="switch-btn" style="margin-top:.8rem" id="backToLookupBtn">← Back</button>
+    <button class="switch-btn" style="margin-top:.8rem" id="backBtn">← Back</button>
   </div>
 
 </div>
 
 <footer class="footer">
   <div class="footer-logo">Riza Tea</div>
-  <div class="footer-copy">© 2025 Riza Tea</div>
+  <div class="footer-copy">© 2025 Riza Tea — شاي ريزا</div>
 </footer>
 
 <div class="toast-container" id="toastContainer"></div>
@@ -322,105 +318,100 @@
 <script src="js/i18n.js"></script>
 <script src="js/app.js"></script>
 <script>
-/* ══════════════════════════════════════════════
-   LOYALTY CARD — full rewrite
-══════════════════════════════════════════════ */
-const STAMPS_GOAL = 10;
+/* ═══════════════════════════════════════════
+   RIZA TEA — LOYALTY CARD
+═══════════════════════════════════════════ */
+const GOAL = 10;
 let currentPhone = null;
+let qrInstance   = null;
 
-// Elements
-const $ = id => document.getElementById(id);
-const lookupBox    = $('lookupBox');
-const cardWrap     = $('cardWrap');
-const registerBox  = $('registerBox');
-const errorBox     = $('errorBox');
-const phoneInput   = $('phoneInput');
-const lookupBtn    = $('lookupBtn');
-const registerBtn  = $('registerBtn');
-const freeBanner   = $('freeDrinkBanner');
+const $  = id => document.getElementById(id);
+const lookupBox  = $('lookupBox');
+const cardWrap   = $('cardWrap');
+const registerBox= $('registerBox');
+const errorBox   = $('errorBox');
+const freeBanner = $('freeBanner');
 
-// ── helpers ──────────────────────────────────
+/* ── utils ──────────────────────────────── */
+function cleanPhone(v){ return v.replace(/\s+/g,'').replace(/[^\d+]/g,''); }
 
-function cleanPhone(raw) {
-  return raw.replace(/\s+/g, '').replace(/[^\d+]/g, '');
-}
-
-function showError(msg) {
+function showError(msg){
   errorBox.textContent = msg;
   errorBox.classList.add('show');
-  setTimeout(() => errorBox.classList.remove('show'), 5000);
+  setTimeout(()=>errorBox.classList.remove('show'), 6000);
 }
 
-function setLoading(btn, loading, defaultText) {
+function setBtn(btn, loading, text){
   btn.disabled = loading;
-  btn.innerHTML = loading ? '<span class="spinner">⏳</span> Loading…' : defaultText;
+  btn.innerHTML = loading ? '<span class="spinner">⏳</span> Loading…' : text;
 }
 
-function generateQR(phone) {
-  const canvas = $('qrCanvas');
-  if (!canvas) return;
-  if (typeof QRCode === 'undefined') {
-    canvas.style.display = 'none';
-    return;
-  }
-  QRCode.toCanvas(canvas, `RIZATEA:${phone}`, {
-    width: 200,
-    margin: 2,
-    color: { dark: '#1A0600', light: '#ffffff' },
-    errorCorrectionLevel: 'M',
-  }, err => {
-    if (err) { console.warn('QR error', err); canvas.style.display = 'none'; }
+function formatDate(iso){
+  if(!iso) return '';
+  try{ return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+  catch{ return ''; }
+}
+
+/* ── QR ─────────────────────────────────── */
+function buildQR(phone){
+  const el = $('qrcode');
+  el.innerHTML = '';          // clear previous
+  qrInstance = new QRCode(el, {
+    text:           `RIZATEA:${phone}`,
+    width:          210,
+    height:         210,
+    colorDark:      '#1A0600',
+    colorLight:     '#ffffff',
+    correctLevel:   QRCode.CorrectLevel.M,
   });
 }
 
-function renderStamps(count) {
+/* ── stamps ─────────────────────────────── */
+function renderStamps(count, animate=false){
   const grid = $('stampsGrid');
   grid.innerHTML = '';
-  for (let i = 0; i < STAMPS_GOAL; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'stamp' +
-      (i === STAMPS_GOAL - 1 ? ' reward' : '') +
-      (i < count ? ' filled' : '');
-    grid.appendChild(dot);
+  for(let i=0;i<GOAL;i++){
+    const d = document.createElement('div');
+    const isLast   = i === GOAL-1;
+    const isFilled = i < count;
+    d.className = 'stamp-cup'
+      + (isLast   ? ' reward' : '')
+      + (isFilled ? ' filled'  : '')
+      + (animate && isFilled && i === count-1 ? ' pop' : '');
+    grid.appendChild(d);
   }
+  $('stampsNow').textContent = count;
 }
 
-function formatDate(iso) {
-  if (!iso) return '';
-  try {
-    return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  } catch { return ''; }
-}
+/* ── show card ──────────────────────────── */
+function showCard(c, animate=false){
+  currentPhone = c.phone;
 
-function showCard(customer) {
-  currentPhone = customer.phone;
-
-  // hide other views
-  lookupBox.style.display = 'none';
+  lookupBox.style.display  = 'none';
   registerBox.classList.remove('show');
   errorBox.classList.remove('show');
 
-  // fill card
-  $('cardName').textContent  = customer.name || 'Guest';
-  $('cardPhone').textContent = customer.phone;
+  const stamps = Math.min(c.stamps||0, GOAL);
+  const total  = c.total_stamps||stamps;
+  const free   = c.free_drinks_earned||0;
 
-  const stamps = Math.min(customer.stamps || 0, STAMPS_GOAL);
-  const total  = customer.total_stamps || stamps;
-  $('stampsCount').textContent = stamps;
-  $('totalEarned').textContent = `${total} total collected`;
+  $('cardName').textContent  = c.name||'Guest';
+  $('cardPhone').textContent = c.phone;
+  $('totalText').textContent = `${total} total collected`;
+  $('freeCount').textContent = free ? `🎁 ${free} free drink${free>1?'s':''} earned` : '';
 
-  renderStamps(stamps);
-  generateQR(customer.phone);
+  renderStamps(stamps, animate);
+  buildQR(c.phone);
 
-  if (stamps >= STAMPS_GOAL) freeBanner.classList.add('show');
-  else freeBanner.classList.remove('show');
+  if(stamps >= GOAL) freeBanner.classList.add('show');
+  else               freeBanner.classList.remove('show');
 
-  const history = customer.history || [];
-  if (history.length) {
+  const hist = c.history||[];
+  if(hist.length){
     $('historySection').style.display = 'block';
-    $('historyList').innerHTML = history.slice(0, 10).map(h => `
+    $('historyList').innerHTML = hist.slice(0,10).map(h=>`
       <div class="history-item">
-        <span class="htype ${h.action === 'redeem' ? 'redeem' : ''}">${h.action === 'redeem' ? '🎁 Redeemed free drink' : '☕ Stamp added'}</span>
+        <span class="htype ${h.action==='redeem'?'redeem':''}">${h.action==='redeem'?'🎁 Redeemed free drink':'☕ Stamp added'}</span>
         <span class="hdate">${formatDate(h.created_at)}</span>
       </div>`).join('');
   } else {
@@ -430,14 +421,7 @@ function showCard(customer) {
   cardWrap.classList.add('show');
 }
 
-function showRegister(phone) {
-  currentPhone = phone;
-  lookupBox.style.display = 'none';
-  $('regPhoneDisplay').textContent = `📱 ${phone}`;
-  registerBox.classList.add('show');
-}
-
-function resetToLookup() {
+function resetToLookup(){
   currentPhone = null;
   cardWrap.classList.remove('show');
   registerBox.classList.remove('show');
@@ -445,85 +429,137 @@ function resetToLookup() {
   errorBox.classList.remove('show');
   $('historySection').style.display = 'none';
   lookupBox.style.display = '';
-  phoneInput.value = '';
-  phoneInput.focus();
+  $('phoneInput').value = '';
+  $('phoneInput').focus();
 }
 
-// ── API calls ─────────────────────────────────
+/* ── API ─────────────────────────────────── */
+async function doLookup(){
+  const phone = cleanPhone($('phoneInput').value);
+  if(phone.length < 7){ showError('Please enter a valid phone number'); return; }
 
-async function doLookup() {
-  const phone = cleanPhone(phoneInput.value);
-  if (phone.length < 7) { showError('Please enter a valid phone number'); return; }
-
-  setLoading(lookupBtn, true, 'Find My Card');
+  setBtn($('lookupBtn'), true, 'Find My Card');
   errorBox.classList.remove('show');
 
-  try {
-    const res = await fetch(`/api/loyalty-lookup?phone=${encodeURIComponent(phone)}`);
+  try{
+    const res  = await fetch(`/api/loyalty-lookup?phone=${encodeURIComponent(phone)}`);
     const data = await res.json();
-
-    if (res.status === 404) {
-      showRegister(phone);
-    } else if (res.ok) {
-      showCard(data);
-    } else {
-      showError(data.error || 'Something went wrong. Please try again.');
-      console.error('Lookup failed:', data);
-    }
-  } catch (err) {
-    console.error('Network error during lookup:', err);
+    if(res.status===404)      showRegister(phone);
+    else if(res.ok)           showCard(data);
+    else                      showError(data.error||'Something went wrong. Please try again.');
+  } catch(e){
+    console.error(e);
     showError('Could not connect. Check your internet and try again.');
-  } finally {
-    setLoading(lookupBtn, false, 'Find My Card');
+  } finally{
+    setBtn($('lookupBtn'), false, 'Find My Card');
   }
 }
 
-async function doRegister() {
+async function doRegister(){
   const phone = currentPhone;
   const name  = $('regName').value.trim();
-  if (!phone) { resetToLookup(); return; }
+  if(!phone){ resetToLookup(); return; }
 
-  setLoading(registerBtn, true, 'Create My Card');
+  setBtn($('registerBtn'), true, 'Create My Card');
 
-  try {
-    const res = await fetch('/api/loyalty-register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, name }),
+  try{
+    const res  = await fetch('/api/loyalty-register',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({phone, name}),
     });
     const data = await res.json();
-
-    if (res.ok) {
+    if(res.ok){
       showCard(data);
-    } else if (res.status === 409) {
-      // Already exists — just look them up
-      const res2 = await fetch(`/api/loyalty-lookup?phone=${encodeURIComponent(phone)}`);
-      const data2 = await res2.json();
-      if (res2.ok) showCard(data2);
-      else showError('Account already exists but could not be loaded. Please try again.');
+    } else if(res.status===409){
+      const r2 = await fetch(`/api/loyalty-lookup?phone=${encodeURIComponent(phone)}`);
+      const d2 = await r2.json();
+      if(r2.ok) showCard(d2); else showError('Could not load card. Please try again.');
     } else {
-      showError(data.error || 'Could not create card. Please try again.');
+      showError(data.error||'Could not create card. Please try again.');
     }
-  } catch (err) {
-    console.error('Register error:', err);
+  } catch(e){
+    console.error(e);
     showError('Could not connect. Check your internet and try again.');
-  } finally {
-    setLoading(registerBtn, false, 'Create My Card');
+  } finally{
+    setBtn($('registerBtn'), false, 'Create My Card');
   }
 }
 
-// ── Events ────────────────────────────────────
+function showRegister(phone){
+  currentPhone = phone;
+  lookupBox.style.display = 'none';
+  $('regPhoneDisplay').textContent = `📱 ${phone}`;
+  registerBox.classList.add('show');
+}
 
-lookupBtn.addEventListener('click', doLookup);
-phoneInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLookup(); });
-registerBtn.addEventListener('click', doRegister);
-$('regName').addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+/* ── Save card as image ─────────────────── */
+$('saveCardBtn').addEventListener('click', async ()=>{
+  // Try html2canvas-lite approach via inline canvas drawing
+  const card = $('loyaltyCard');
 
+  // Fallback: open a printer-friendly version
+  const name  = $('cardName').textContent;
+  const phone = $('cardPhone').textContent;
+  const stamps= parseInt($('stampsNow').textContent)||0;
+
+  const cups = Array.from({length:10},(_,i)=>
+    i < stamps ? '☕' : i===9 ? '🎁' : '○'
+  ).join(' ');
+
+  const w = window.open('','_blank','width=480,height=700');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Riza Tea Card</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#f5f0e0;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:1rem;font-family:'Inter',sans-serif}
+    .card{background:#FFFBF0;border-radius:24px;overflow:hidden;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+    .top{background:#1A0600;padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center}
+    .brand{color:#FEDF00;font-family:'Playfair Display',serif;font-size:1.2rem}
+    .brand-ar{color:rgba(254,223,0,.6);font-size:.7rem}
+    .sc .sl{font-size:.6rem;color:rgba(254,223,0,.6);letter-spacing:.1em;text-transform:uppercase}
+    .sc .sv{font-size:1.4rem;font-weight:800;color:#FEDF00}
+    .body{padding:1.4rem 1.5rem}
+    .cups{font-size:1.8rem;letter-spacing:.15rem;margin-bottom:1.2rem;line-height:1.6}
+    .nl{font-size:.6rem;color:#BBA840;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem}
+    .nv{font-size:1rem;font-weight:700;color:#1A0600}
+    .ph{font-size:.78rem;color:#BBA840}
+    .qr-wrap{text-align:center;padding:1.2rem;background:#fff;border-top:1px solid rgba(26,6,0,.06)}
+    .qr-label{font-size:.65rem;color:#6B5500;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:.8rem}
+    img.qr{border-radius:10px}
+    .save-hint{font-size:.72rem;color:#BBA840;margin-top:.8rem;text-align:center;padding:0 1rem 1rem}
+  </style></head><body>
+  <div class="card">
+    <div class="top">
+      <div><div class="brand">Riza Tea</div><div class="brand-ar">شاي ريزا</div></div>
+      <div class="sc"><div class="sl">Stamps</div><div class="sv">${stamps}/10</div></div>
+    </div>
+    <div class="body">
+      <div class="cups">${cups}</div>
+      <div class="nl">Name</div><div class="nv">${name}</div><div class="ph">${phone}</div>
+    </div>
+    <div class="qr-wrap">
+      <div class="qr-label">Show to cashier to add stamp</div>
+      <div id="qr"></div>
+    </div>
+    <div class="save-hint">📸 Screenshot this page and save to your phone!</div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"><\/script>
+  <script>new QRCode($('qr'),{text:'RIZATEA:${phone}',width:200,height:200,colorDark:'#1A0600',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})<\/script>
+  </body></html>`);
+  w.document.close();
+});
+
+/* ── events ─────────────────────────────── */
+$('lookupBtn').addEventListener('click', doLookup);
+$('phoneInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doLookup(); });
+$('registerBtn').addEventListener('click', doRegister);
+$('regName').addEventListener('keydown', e=>{ if(e.key==='Enter') doRegister(); });
 $('switchCardBtn').addEventListener('click', resetToLookup);
-$('backToLookupBtn').addEventListener('click', resetToLookup);
+$('backBtn').addEventListener('click', resetToLookup);
 
-// Auto-focus phone input on load
-window.addEventListener('load', () => phoneInput.focus());
+window.addEventListener('load', ()=> $('phoneInput').focus());
 </script>
 </body>
 </html>
