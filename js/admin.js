@@ -93,11 +93,9 @@ async function tryLogin() {
     } else {
       document.getElementById('loginError').style.display = 'block';
     }
-  } catch {
-    // Dev mode — accept any password
-    authToken = 'dev';
-    sessionStorage.setItem('rizaAdminToken', 'dev');
-    enterAdmin();
+  } catch (err) {
+    console.error('Admin login error:', err);
+    document.getElementById('loginError').style.display = 'block';
   }
 }
 

@@ -258,10 +258,9 @@ async function cashierLogin() {
     } else {
       document.getElementById('cLoginError').style.display = 'block';
     }
-  } catch {
-    authToken = 'dev';
-    sessionStorage.setItem('rizaCashierToken', 'dev');
-    enterCashier();
+  } catch (err) {
+    console.error('Cashier login error:', err);
+    document.getElementById('cLoginError').style.display = 'block';
   }
 }
 
