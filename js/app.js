@@ -50,44 +50,66 @@ if (lightbox) {
   lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
 }
 
-// Hero particles (floating tea leaves)
+// Hero particles (tea cups, mint leaves, sparkles)
 const canvas = document.getElementById('particles');
 if (canvas) {
   const ctx = canvas.getContext('2d');
   let particles = [];
+
+  // Pre-render emoji to off-screen canvases for performance
+  const EMOJIS = ['☕', '🍵', '🌿', '✨', '🫖', '🌱', '⭐', '🍃'];
+  const emojiCache = {};
+  EMOJIS.forEach(em => {
+    const sizes = [20, 26, 32, 38];
+    emojiCache[em] = {};
+    sizes.forEach(sz => {
+      const c = document.createElement('canvas');
+      c.width = sz + 4; c.height = sz + 4;
+      const x = c.getContext('2d');
+      x.font = `${sz}px serif`;
+      x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.fillText(em, (sz + 4) / 2, (sz + 4) / 2);
+      emojiCache[em][sz] = c;
+    });
+  });
 
   function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   resize();
   window.addEventListener('resize', resize);
 
   function createParticle() {
+    const sizes = [20, 26, 32, 38];
+    const sz = sizes[Math.floor(Math.random() * sizes.length)];
+    const em = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
     return {
       x: Math.random() * canvas.width,
-      y: canvas.height + 20,
-      size: Math.random() * 6 + 3,
-      speedY: -(Math.random() * .8 + .3),
-      speedX: (Math.random() - .5) * .5,
-      opacity: Math.random() * .4 + .1,
+      y: canvas.height + sz,
+      size: sz,
+      emoji: em,
+      speedY: -(Math.random() * 0.7 + 0.25),
+      speedX: (Math.random() - 0.5) * 0.6,
+      opacity: Math.random() * 0.5 + 0.15,
       rotation: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - .5) * .02,
+      rotSpeed: (Math.random() - 0.5) * 0.018,
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: Math.random() * 0.03 + 0.01,
     };
   }
 
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 38; i++) {
     const p = createParticle();
     p.y = Math.random() * canvas.height;
     particles.push(p);
   }
 
-  function drawLeaf(ctx, p) {
+  function drawParticle(p) {
+    const img = emojiCache[p.emoji]?.[p.size];
+    if (!img) return;
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.rotation);
     ctx.globalAlpha = p.opacity;
-    ctx.fillStyle = '#C8860A';
-    ctx.beginPath();
-    ctx.ellipse(0, 0, p.size, p.size * 2, 0, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.drawImage(img, -img.width / 2, -img.height / 2);
     ctx.restore();
   }
 
@@ -95,10 +117,11 @@ if (canvas) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach((p, i) => {
       p.y += p.speedY;
-      p.x += p.speedX;
+      p.wobble += p.wobbleSpeed;
+      p.x += p.speedX + Math.sin(p.wobble) * 0.4;
       p.rotation += p.rotSpeed;
-      if (p.y < -20) particles[i] = createParticle();
-      drawLeaf(ctx, p);
+      if (p.y < -50) particles[i] = createParticle();
+      drawParticle(p);
     });
     requestAnimationFrame(animate);
   }
