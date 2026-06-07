@@ -1,11 +1,25 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers: cors() };
+  if (event.httpMethod !== 'POST') return { statusCode: 405, headers: cors(), body: JSON.stringify({ error: 'Method not allowed' }) };
 
-  const { phone, name } = JSON.parse(event.body || '{}');
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('Missing Supabase env vars');
+    return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: 'Server misconfigured' }) };
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  let phone, name;
+  try {
+    ({ phone, name } = JSON.parse(event.body || '{}'));
+  } catch {
+    return { statusCode: 400, headers: cors(), body: JSON.stringify({ error: 'Invalid request body' }) };
+  }
+
   if (!phone) return { statusCode: 400, headers: cors(), body: JSON.stringify({ error: 'phone required' }) };
 
   try {
@@ -21,10 +35,16 @@ exports.handler = async (event) => {
 
     return { statusCode: 201, headers: cors(), body: JSON.stringify({ ...data, history: [] }) };
   } catch (err) {
+    console.error('loyalty-register error:', err.message);
     return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: err.message }) };
   }
 };
 
 function cors() {
-  return { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type' };
+  return {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  };
 }

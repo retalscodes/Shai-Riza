@@ -1,10 +1,19 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-
 exports.handler = async (event) => {
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers: cors() };
+
   const phone = event.queryStringParameters?.phone;
   if (!phone) return { statusCode: 400, headers: cors(), body: JSON.stringify({ error: 'phone required' }) };
+
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('Missing Supabase env vars');
+    return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: 'Server misconfigured' }) };
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
   try {
     const { data: customer, error } = await supabase
@@ -21,8 +30,16 @@ exports.handler = async (event) => {
 
     return { statusCode: 200, headers: cors(), body: JSON.stringify({ ...customer, history: history || [] }) };
   } catch (err) {
+    console.error('loyalty-lookup error:', err.message);
     return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: err.message }) };
   }
 };
 
-function cors() { return { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }; }
+function cors() {
+  return {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  };
+}

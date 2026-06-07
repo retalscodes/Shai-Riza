@@ -1,23 +1,35 @@
 const { createClient } = require('@supabase/supabase-js');
 const crypto = require('crypto');
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 const STAMPS_GOAL = 10;
 
 function verifyToken(event) {
   const token = (event.headers['authorization'] || '').replace('Bearer ', '');
-  // Accept both cashier token and admin token
   const cashierValid = crypto.createHmac('sha256', process.env.CASHIER_PASSWORD || '').update('riza-cashier').digest('hex');
   const adminValid   = crypto.createHmac('sha256', process.env.ADMIN_PASSWORD  || '').update('riza-admin').digest('hex');
-  return token === cashierValid || token === adminValid || token === 'dev';
+  return token === cashierValid || token === adminValid;
 }
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers: cors() };
-  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
+  if (event.httpMethod !== 'POST') return { statusCode: 405, headers: cors(), body: JSON.stringify({ error: 'Method not allowed' }) };
   if (!verifyToken(event)) return { statusCode: 401, headers: cors(), body: JSON.stringify({ error: 'Unauthorized' }) };
 
-  const { phone, action } = JSON.parse(event.body || '{}');
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+  if (!supabaseUrl || !supabaseKey) {
+    return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: 'Server misconfigured' }) };
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  let phone, action;
+  try {
+    ({ phone, action } = JSON.parse(event.body || '{}'));
+  } catch {
+    return { statusCode: 400, headers: cors(), body: JSON.stringify({ error: 'Invalid request body' }) };
+  }
+
   if (!phone || !['stamp', 'redeem'].includes(action)) {
     return { statusCode: 400, headers: cors(), body: JSON.stringify({ error: 'phone and action required' }) };
   }
@@ -54,10 +66,16 @@ exports.handler = async (event) => {
 
     return { statusCode: 200, headers: cors(), body: JSON.stringify({ ...updated, history: history || [] }) };
   } catch (err) {
+    console.error('cashier-stamp error:', err.message);
     return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: err.message }) };
   }
 };
 
 function cors() {
-  return { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type' };
+  return {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  };
 }
