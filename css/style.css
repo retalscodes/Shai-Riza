@@ -4,9 +4,9 @@
   --bg:        #FFF8DC;
   --surface:   #FFF3A3;
   --card:      #FFFFFF;
-  --yellow:    #FFD600;
-  --yellow-dk: #FFC200;
-  --black:     #1A1200;
+  --yellow:    #FEDF00;
+  --yellow-dk: #E8C900;
+  --black:     #1A0600;
   --muted:     #6B5500;
   --accent:    #FF8F00;
   --green:     #2E7D32;
@@ -114,7 +114,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   padding: 6rem 1.5rem 4rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, #FFD600 0%, #FFF3A3 50%, #FFFDE7 100%);
+  background: linear-gradient(160deg, #FEDF00 0%, #FFF3A3 50%, #FFFDE7 100%);
 }
 
 .hero-bg {
@@ -143,17 +143,32 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   font-family: 'Playfair Display', 'Noto Serif Arabic', serif;
   font-size: clamp(2.8rem, 8vw, 5.5rem);
   line-height: 1.05;
-  color: var(--black);
+  color: var(--yellow);
+  -webkit-text-stroke: 3px var(--black);
+  paint-order: stroke fill;
   margin-bottom: .6rem;
   animation: fadeDown .8s .15s ease both;
 }
-.hero-title span { color: var(--accent); }
+.hero-title span {
+  color: var(--yellow);
+  -webkit-text-stroke: 3px var(--black);
+}
+
+/* Arabic mode: hide English title, promote Arabic to main heading */
+[dir="rtl"] .hero-title { display: none; }
 
 .hero-title-ar {
   font-family: 'Noto Serif Arabic', serif;
   font-size: clamp(1.6rem, 4vw, 2.8rem);
   color: var(--muted); margin-bottom: 1.5rem;
   animation: fadeDown .8s .25s ease both;
+}
+[dir="rtl"] .hero-title-ar {
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  color: var(--yellow);
+  -webkit-text-stroke: 3px var(--black);
+  paint-order: stroke fill;
+  margin-bottom: .6rem;
 }
 
 .hero-tagline {

@@ -2,7 +2,7 @@ const translations = {
   en: {
     nav_home: 'Home', nav_menu: 'Menu', nav_loyalty: 'Loyalty Card', nav_contact: 'Contact',
     hero_badge: 'Specialty Tea House',
-    hero_tagline: 'Where every sip tells a story. Handcrafted teas, bold karak, and flavours you won\'t find anywhere else.',
+    hero_tagline: 'I drink tea hoping my thoughts will grow — yet my thoughts scattered, and the tea grew cold.',
     hero_cta1: 'Explore Menu', hero_cta2: 'My Loyalty Card',
     featured_label: 'Our Favourites', featured_title: 'Made to Savour',
     featured_sub: 'A curated taste of what makes Riza special.',
@@ -39,7 +39,7 @@ const translations = {
   ar: {
     nav_home: 'الرئيسية', nav_menu: 'القائمة', nav_loyalty: 'بطاقة الولاء', nav_contact: 'اتصل بنا',
     hero_badge: 'بيت الشاي المتخصص',
-    hero_tagline: 'كل كوب وله حكاية. شاي يستاهل، كرك ما يفوتك، ونكهات ما راح تلاقيها في غير ريزا.',
+    hero_tagline: 'أشرب من الشاهي عسى فكري يزيد، ضاعت أفكاري والشاهي برد.',
     hero_cta1: 'شوف القائمة', hero_cta2: 'بطاقتي',
     featured_label: 'أحلى عندنا', featured_title: 'طعم ما ينسى',
     featured_sub: 'اختيارات من أحلى ما عندنا — جرب وشوف الفرق.',
